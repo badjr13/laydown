@@ -14,8 +14,9 @@ const CLEAR: &str = "clear";
 const STANDUP: &str = "standup";
 const HELP: &str = "help";
 
-const INVALID_COMMAND: &str =
-    "The command you entered is not valid. Try \"laydown help\" for a list of commands.";
+fn print_invalid_command() {
+    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
+}
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
@@ -30,10 +31,10 @@ fn main() {
         2 => {
             let command = arguments[1].as_str();
             match command {
-                CLEAR => standup_data.clear_data(),
                 STANDUP => standup_data.display_data(),
-                HELP => println!("Help Me Please!"),
-                _ => panic!("{}", INVALID_COMMAND),
+                CLEAR => standup_data.clear_data(),
+                HELP => print_help_information(),
+                _ => print_invalid_command(),
             }
         }
         3 => {
@@ -41,10 +42,10 @@ fn main() {
             let user_input = arguments[2].as_str();
             match command {
                 DID | DOING | BLOCKER | SIDEBAR => standup_data.add_item(command, user_input),
-                _ => panic!("{}", INVALID_COMMAND),
+                _ => print_invalid_command(),
             }
         }
-        _ => panic!("{}", INVALID_COMMAND),
+        _ => print_invalid_command(),
     }
 }
 
@@ -83,7 +84,7 @@ impl Standup {
             .write(true)
             .truncate(true)
             .open(file)
-            .unwrap();
+            .expect("Failed to erase existing data from laydown.ron");
     }
 
     fn display_data(self) {
@@ -120,7 +121,9 @@ impl Standup {
 }
 
 fn get_path_to_ron_file() -> PathBuf {
-    let laydown_config_directory = dirs::config_dir().unwrap().join("laydown");
+    let laydown_config_directory = dirs::config_dir()
+        .expect("Failed to find laydown config directory")
+        .join("laydown");
     fs::create_dir(&laydown_config_directory).ok();
 
     let ron_file_path: PathBuf = laydown_config_directory.join("laydown.ron");
@@ -130,21 +133,21 @@ fn get_path_to_ron_file() -> PathBuf {
         .read(true)
         .write(true)
         .open(&ron_file_path)
-        .unwrap();
+        .expect("Failed to find laydown.ron file");
 
     ron_file_path
 }
 
 fn read_from_ron_file() -> Standup {
     let file = get_path_to_ron_file();
-    let content = fs::read_to_string(file).unwrap();
+    let content = fs::read_to_string(file).expect("Failed to read content from laydown.ron");
     let deserialized_content: Standup = match ron::from_str(&content) {
-        Ok(good_stuff) => good_stuff,
+        Ok(_deserialized_content) => _deserialized_content,
         Err(error) => match error.code {
             ron::error::ErrorCode::ExpectedStruct => Standup::new(),
             other_error => {
                 panic!(
-                    "There was an issue when trying to read the ron file: {}",
+                    "Failed to deserialize content from laydown.ron: {}",
                     other_error
                 );
             }
@@ -155,6 +158,18 @@ fn read_from_ron_file() -> Standup {
 
 fn write_to_ron_file(data: Standup) {
     let file = get_path_to_ron_file();
-    let content = ron::to_string(&data).unwrap();
-    fs::write(file, content).unwrap();
+    let content = ron::to_string(&data).expect("Failed to serialize laydown.ron Struct to string");
+    fs::write(file, content).expect("Failed to write to laydown.ron");
+}
+
+fn print_help_information() {
+    println!("\nUsage: laydown <command> \"<argument>\"\n");
+    println!("Available commands:");
+    println!("did         Add item to DID section of your Standup");
+    println!("doing       Add item to DOING section of your Standup");
+    println!("blocker     Add item to BLOCKERS section of your Standup");
+    println!("sidebar     Add item to SIDEBARS section of your Standup\n");
+    println!("clear       Remove all items from your Standup");
+    println!("help        Display this message\n");
+    println!("Running 'laydown' without passing any arguments will display your Standup")
 }
