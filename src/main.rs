@@ -14,22 +14,37 @@ const CLEAR: &str = "clear";
 const STANDUP: &str = "standup";
 const HELP: &str = "help";
 
+const INVALID_COMMAND: &str =
+    "The command you entered is not valid. Try \"laydown help\" for a list of commands.";
+
 fn main() {
     let arguments: Vec<String> = env::args().collect();
-    // name of executable = arguments[0] by default
-    let command = arguments[1].as_str();
 
     let standup_data = read_from_ron_file();
 
-    match command {
-        DID | DOING | BLOCKER | SIDEBAR => standup_data.add_item(command, arguments[2].as_str()),
-        CLEAR => standup_data.clear_data(),
-        STANDUP => standup_data.display_data(),
-        HELP => println!("Help Me Please!"),
-        _ => panic!(
-            "\"{}\" is not a valid command. Try \"laydown help\" for a list of commands.",
-            command
-        ),
+    match arguments.len() {
+        0 => panic!("Something went wrong."),
+        // Name of executable is always passed as the first element of env::args()
+        // User arguments start at the second element or argument[1]
+        1 => standup_data.display_data(),
+        2 => {
+            let command = arguments[1].as_str();
+            match command {
+                CLEAR => standup_data.clear_data(),
+                STANDUP => standup_data.display_data(),
+                HELP => println!("Help Me Please!"),
+                _ => panic!("{}", INVALID_COMMAND),
+            }
+        }
+        3 => {
+            let command = arguments[1].as_str();
+            let user_input = arguments[2].as_str();
+            match command {
+                DID | DOING | BLOCKER | SIDEBAR => standup_data.add_item(command, user_input),
+                _ => panic!("{}", INVALID_COMMAND),
+            }
+        }
+        _ => panic!("{}", INVALID_COMMAND),
     }
 }
 
