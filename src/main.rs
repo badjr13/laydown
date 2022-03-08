@@ -93,29 +93,33 @@ impl Standup {
         if !standup.did.is_empty() {
             println!("DID:");
             for item in standup.did {
-                println!("- {}\n", item);
+                println!("- {}", item);
             }
+            println!();
         }
 
         if !standup.doing.is_empty() {
             println!("DOING:");
             for item in standup.doing {
-                println!("- {}\n", item);
+                println!("- {}", item);
             }
+            println!();
         }
 
         if !standup.blockers.is_empty() {
             println!("BLOCKERS:");
             for item in standup.blockers {
-                println!("- {}\n", item);
+                println!("- {}", item);
             }
+            println!();
         }
 
         if !standup.sidebars.is_empty() {
             println!("SIDEBARS:");
             for item in standup.sidebars {
-                println!("- {}\n", item);
+                println!("- {}", item);
             }
+            println!();
         }
     }
 }
