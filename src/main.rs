@@ -4,36 +4,53 @@ use std::env;
 use std::fs;
 use std::fs::OpenOptions;
 use std::path::PathBuf;
+use std::process::Command;
+
+const CLEAR: &str = "clear";
+const EDIT: &str = "edit";
+const HELP: &str = "help";
 
 const DID: &str = "did";
 const DOING: &str = "doing";
 const BLOCKER: &str = "blocker";
 const SIDEBAR: &str = "sidebar";
-
-const CLEAR: &str = "clear";
 const STANDUP: &str = "standup";
-const HELP: &str = "help";
+
+fn main() {
+    let arguments: Vec<String> = env::args().collect();
+
+    if arguments.len() == 2 {
+        // These commands are data independent
+        match arguments[1].as_str() {
+            // When directly editing the file, user error could leave the
+            // file in a state that cannot be deserialized. All data dependent
+            // commands depend on "laydown.ron" being deserializeable and will
+            // error out if not. Separating this command allows a user to edit the
+            // file that is already in a bad state and fix any issues to recover it.
+            CLEAR => clear_data_from_ron_file(),
+            EDIT => manually_edit_ron_file(),
+            HELP => print_help_information(),
+            _ => (),
+        }
+    } else {
+        run_data_dependent(arguments)
+    }
+}
 
 fn print_invalid_command() {
     println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
 }
 
-fn main() {
-    let arguments: Vec<String> = env::args().collect();
-
+fn run_data_dependent(arguments: Vec<String>) {
     let standup_data = read_from_ron_file();
 
     match arguments.len() {
         0 => panic!("Something went wrong."),
-        // Name of executable is always passed as the first element of env::args()
-        // User arguments start at the second element or argument[1]
         1 => standup_data.display_data(),
         2 => {
             let command = arguments[1].as_str();
             match command {
                 STANDUP => standup_data.display_data(),
-                CLEAR => standup_data.clear_data(),
-                HELP => print_help_information(),
                 _ => print_invalid_command(),
             }
         }
@@ -76,15 +93,6 @@ impl Standup {
             _ => println!("Not a valid command."),
         };
         write_to_ron_file(self)
-    }
-
-    fn clear_data(self) {
-        let file = get_path_to_ron_file();
-        OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .open(file)
-            .expect("Failed to erase existing data from laydown.ron");
     }
 
     fn display_data(self) {
@@ -162,18 +170,40 @@ fn read_from_ron_file() -> Standup {
 
 fn write_to_ron_file(data: Standup) {
     let file = get_path_to_ron_file();
-    let content = ron::to_string(&data).expect("Failed to serialize laydown.ron Struct to string");
+    let content = ron::ser::to_string_pretty(&data, ron::ser::PrettyConfig::default())
+        .expect("Failed to serialize laydown.ron Struct to string");
     fs::write(file, content).expect("Failed to write to laydown.ron");
 }
 
+fn manually_edit_ron_file() {
+    let file = get_path_to_ron_file();
+    Command::new("vi")
+        .arg(file)
+        .status()
+        .expect("Failed to open laydown.ron");
+}
+
+fn clear_data_from_ron_file() {
+    let file = get_path_to_ron_file();
+    OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(file)
+        .expect("Failed to erase existing data from laydown.ron");
+}
+
 fn print_help_information() {
-    println!("\nUsage: laydown <command> \"<argument>\"\n");
+    println!("\nRunning \"laydown\" without passing any arguments will display your Standup\n");
+    println!("Usage: laydown <command> \"<item>\"\n");
     println!("Available commands:");
     println!("did         Add item to DID section of your Standup");
     println!("doing       Add item to DOING section of your Standup");
     println!("blocker     Add item to BLOCKERS section of your Standup");
     println!("sidebar     Add item to SIDEBARS section of your Standup\n");
-    println!("clear       Remove all items from your Standup");
+    println!("clear       Remove all items from your Standup\n");
+    println!("edit        Directly access data displayed in your Standup.");
+    println!("            This can be used to edit or delete existing entries.");
+    println!("            CAUTION: Edits must follow RON formatting. ");
+    println!("            See: https://github.com/ron-rs/ron\n");
     println!("help        Display this message\n");
-    println!("Running 'laydown' without passing any arguments will display your Standup")
 }
