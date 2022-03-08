@@ -30,7 +30,7 @@ fn main() {
             CLEAR => clear_data_from_ron_file(),
             EDIT => manually_edit_ron_file(),
             HELP => print_help_information(),
-            _ => (),
+            _ => run_data_dependent(arguments),
         }
     } else {
         run_data_dependent(arguments)
