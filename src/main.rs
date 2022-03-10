@@ -36,15 +36,15 @@ fn main() {
 }
 
 fn run_data_dependent(arguments: Vec<String>) {
-    let standup_data = data_file::read_from_ron_file();
+    let standup = data_file::read_from_ron_file();
 
     match arguments.len() {
         0 => panic!("Something went wrong."),
-        1 => standup_data.display_data(),
+        1 => display_data(),
         2 => {
             let command = arguments[1].as_str();
             match command {
-                STANDUP => standup_data.display_data(),
+                STANDUP => display_data(),
                 _ => print_invalid_command(),
             }
         }
@@ -52,7 +52,7 @@ fn run_data_dependent(arguments: Vec<String>) {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
             match command {
-                DID | DOING | BLOCKER | SIDEBAR => standup_data.add_item(command, user_input),
+                DID | DOING | BLOCKER | SIDEBAR => standup.add_item(command, user_input),
                 _ => print_invalid_command(),
             }
         }
@@ -62,6 +62,42 @@ fn run_data_dependent(arguments: Vec<String>) {
 
 fn print_invalid_command() {
     println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
+}
+
+pub fn display_data() {
+    let standup = data_file::read_from_ron_file();
+
+    if !standup.did.is_empty() {
+        println!("DID:");
+        for item in standup.did {
+            println!("- {}", item);
+        }
+        println!();
+    }
+
+    if !standup.doing.is_empty() {
+        println!("DOING:");
+        for item in standup.doing {
+            println!("- {}", item);
+        }
+        println!();
+    }
+
+    if !standup.blockers.is_empty() {
+        println!("BLOCKERS:");
+        for item in standup.blockers {
+            println!("- {}", item);
+        }
+        println!();
+    }
+
+    if !standup.sidebars.is_empty() {
+        println!("SIDEBARS:");
+        for item in standup.sidebars {
+            println!("- {}", item);
+        }
+        println!();
+    }
 }
 
 fn print_help_information() {

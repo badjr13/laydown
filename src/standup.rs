@@ -5,10 +5,10 @@ use crate::{BLOCKER, DID, DOING, SIDEBAR};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Standup {
-    did: Vec<String>,
-    doing: Vec<String>,
-    blockers: Vec<String>,
-    sidebars: Vec<String>,
+    pub did: Vec<String>,
+    pub doing: Vec<String>,
+    pub blockers: Vec<String>,
+    pub sidebars: Vec<String>,
 }
 
 impl Standup {
@@ -30,41 +30,5 @@ impl Standup {
             _ => println!("Not a valid command."),
         };
         data_file::write_to_ron_file(self)
-    }
-
-    pub fn display_data(self) {
-        let standup: Standup = data_file::read_from_ron_file();
-
-        if !standup.did.is_empty() {
-            println!("DID:");
-            for item in standup.did {
-                println!("- {}", item);
-            }
-            println!();
-        }
-
-        if !standup.doing.is_empty() {
-            println!("DOING:");
-            for item in standup.doing {
-                println!("- {}", item);
-            }
-            println!();
-        }
-
-        if !standup.blockers.is_empty() {
-            println!("BLOCKERS:");
-            for item in standup.blockers {
-                println!("- {}", item);
-            }
-            println!();
-        }
-
-        if !standup.sidebars.is_empty() {
-            println!("SIDEBARS:");
-            for item in standup.sidebars {
-                println!("- {}", item);
-            }
-            println!();
-        }
     }
 }
