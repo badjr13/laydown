@@ -29,6 +29,7 @@ impl Standup {
             SIDEBAR => self.sidebars.push(String::from(item)),
             _ => println!("Not a valid command."),
         };
+
         data_file::write_to_ron_file(self)
     }
 }
