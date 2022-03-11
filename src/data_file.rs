@@ -48,8 +48,12 @@ pub fn read_from_ron_file() -> Standup {
 pub fn write_to_ron_file(data: Standup) {
     let file = get_path_to_ron_file();
 
-    let content = ron::ser::to_string_pretty(&data, ron::ser::PrettyConfig::default())
+    let warning = "// Do not rename or delete arrays. Only update elements.\n".to_string();
+
+    let standup_data = ron::ser::to_string_pretty(&data, ron::ser::PrettyConfig::default())
         .expect("Failed to serialize laydown.ron Struct to string");
+
+    let content = warning + &standup_data;
 
     fs::write(file, content).expect("Failed to write to laydown.ron");
 }
