@@ -15,8 +15,12 @@ const SIDEBAR: &str = "sidebar";
 fn main() {
     let arguments: Vec<String> = env::args().collect();
 
+    parse_arguments(arguments);
+}
+
+fn parse_arguments(arguments: Vec<String>) {
     match arguments.len() {
-        1 => display_data(),
+        1 => print_standup_data(),
         2 => match arguments[1].as_str() {
             CLEAR => data_file::clear_data_from_ron_file(),
             EDIT => data_file::manually_edit_ron_file(),
@@ -36,11 +40,7 @@ fn main() {
     }
 }
 
-fn print_invalid_command() {
-    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
-}
-
-pub fn display_data() {
+pub fn print_standup_data() {
     let standup = data_file::read_from_ron_file();
 
     println!();
@@ -76,6 +76,10 @@ pub fn display_data() {
         }
         println!();
     }
+}
+
+fn print_invalid_command() {
+    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
 }
 
 fn print_help_information() {

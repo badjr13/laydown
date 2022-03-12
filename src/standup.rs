@@ -31,7 +31,5 @@ impl Standup {
         };
 
         data_file::write_to_ron_file(self);
-
-        crate::display_data();
     }
 }
