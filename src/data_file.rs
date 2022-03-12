@@ -58,13 +58,14 @@ pub fn write_to_ron_file(data: Standup) {
     fs::write(file, content).expect("Failed to write to laydown.ron");
 }
 
-pub fn manually_edit_ron_file() {
+pub fn manually_edit_ron_file(editor: &str) {
     let file = get_path_to_ron_file();
 
-    Command::new("vi")
+    Command::new(editor)
         .arg(file)
         .status()
         .expect("Failed to open laydown.ron");
+    // TODO: Add error handling for invalid editor being passed
 }
 
 pub fn clear_data_from_ron_file() {
