@@ -6,7 +6,7 @@ use std::process::Command;
 
 use crate::standup::Standup;
 
-pub fn get_path_to_ron_file() -> PathBuf {
+fn get_path_to_ron_file() -> PathBuf {
     let laydown_config_directory = dirs::config_dir()
         .expect("Failed to find laydown config directory")
         .join("laydown");

@@ -44,7 +44,7 @@ fn parse_arguments(arguments: Vec<String>) {
     }
 }
 
-pub fn print_standup_data() {
+fn print_standup_data() {
     let standup = data_file::read_from_ron_file();
 
     println!();
