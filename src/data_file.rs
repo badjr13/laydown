@@ -1,5 +1,6 @@
 use std::fs;
 use std::fs::OpenOptions;
+use std::io::ErrorKind;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -61,11 +62,13 @@ pub fn write_to_ron_file(data: Standup) {
 pub fn manually_edit_ron_file(editor: &str) {
     let file = get_path_to_ron_file();
 
-    Command::new(editor)
-        .arg(file)
-        .status()
-        .expect("Failed to open laydown.ron");
-    // TODO: Add error handling for invalid editor being passed
+    match Command::new(editor).arg(file).status() {
+        Ok(edit_file) => edit_file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => panic!("Could not find editor provided."),
+            other_error => panic!("{:?}", other_error),
+        },
+    };
 }
 
 pub fn clear_data_from_ron_file() {
