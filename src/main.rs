@@ -97,7 +97,6 @@ fn print_help_information() {
     println!("clear             Remove all items from your Standup\n");
     println!("edit <editor>     Directly access data displayed in your Standup.");
     println!("                  This can be used to edit or delete existing entries.");
-    println!("                  CAUTION: Edits must follow RON formatting. ");
-    println!("                  See: https://github.com/ron-rs/ron/wiki/Specification\n");
+    println!("                  Will use VI by default if no editor is provided.\n");
     println!("help              Display this message\n");
 }

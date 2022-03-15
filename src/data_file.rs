@@ -25,6 +25,18 @@ fn get_path_to_ron_file() -> PathBuf {
     ron_file_path
 }
 
+#[test]
+fn test_get_path_to_ron_file() {
+    let result: PathBuf = get_path_to_ron_file();
+
+    let expected: PathBuf = dirs::config_dir()
+        .unwrap()
+        .join("laydown")
+        .join("laydown.ron");
+
+    assert_eq!(result.to_str().unwrap(), expected.to_str().unwrap());
+}
+
 pub fn read_from_ron_file() -> Standup {
     let file = get_path_to_ron_file();
 
