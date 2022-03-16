@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data_file;
-use crate::{BLOCKER, DID, DOING, SIDEBAR};
+use crate::{BL, BLOCKER, DI, DID, DO, DOING, SB, SIDEBAR};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Standup {
@@ -23,10 +23,10 @@ impl Standup {
 
     pub fn add_item(mut self, command: &str, item: &str) {
         match command {
-            DID => self.did.push(String::from(item)),
-            DOING => self.doing.push(String::from(item)),
-            BLOCKER => self.blockers.push(String::from(item)),
-            SIDEBAR => self.sidebars.push(String::from(item)),
+            DID | DI => self.did.push(String::from(item)),
+            DOING | DO => self.doing.push(String::from(item)),
+            BLOCKER | BL => self.blockers.push(String::from(item)),
+            SIDEBAR | SB => self.sidebars.push(String::from(item)),
             _ => println!("Not a valid command."),
         };
 

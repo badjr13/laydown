@@ -8,9 +8,16 @@ const EDIT: &str = "edit";
 const HELP: &str = "help";
 
 const DID: &str = "did";
+const DI: &str = "di";
+
 const DOING: &str = "doing";
+const DO: &str = "do";
+
 const BLOCKER: &str = "blocker";
+const BL: &str = "bl";
+
 const SIDEBAR: &str = "sidebar";
+const SB: &str = "sb";
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
@@ -35,7 +42,9 @@ fn parse_arguments(arguments: Vec<String>) {
             let user_input = arguments[2].as_str();
             let standup = data_file::read_from_ron_file();
             match command {
-                DID | DOING | BLOCKER | SIDEBAR => standup.add_item(command, user_input),
+                DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
+                    standup.add_item(command, user_input)
+                }
                 EDIT => data_file::manually_edit_ron_file(user_input),
                 _ => print_invalid_command(),
             }
@@ -90,13 +99,13 @@ fn print_help_information() {
     println!("\nRunning \"laydown\" without passing any arguments will display your Standup\n");
     println!("Usage: laydown <command> \"<item>\"\n");
     println!("Available commands:");
-    println!("did     <item>    Add item to DID section of your Standup");
-    println!("doing   <item>    Add item to DOING section of your Standup");
-    println!("blocker <item>    Add item to BLOCKERS section of your Standup");
-    println!("sidebar <item>    Add item to SIDEBARS section of your Standup\n");
-    println!("clear             Remove all items from your Standup\n");
-    println!("edit <editor>     Directly access data displayed in your Standup.");
-    println!("                  This can be used to edit or delete existing entries.");
-    println!("                  Will use VI by default if no editor is provided.\n");
-    println!("help              Display this message\n");
+    println!("di, did      <item>  Add item to DID section of your Standup");
+    println!("do, doing    <item>  Add item to DOING section of your Standup");
+    println!("bl, blocker  <item>  Add item to BLOCKERS section of your Standup");
+    println!("sb, sidebar  <item>  Add item to SIDEBARS section of your Standup\n");
+    println!("clear                Remove all items from your Standup\n");
+    println!("edit <editor>        Directly access data displayed in your Standup.");
+    println!("                     This can be used to edit or delete existing entries.");
+    println!("                     Will use VI by default if no editor is provided.\n");
+    println!("help                 Display this message\n");
 }
