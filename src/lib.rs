@@ -1,4 +1,4 @@
-mod data_file;
+pub mod data_file;
 mod standup;
 
 const CLEAR: &str = "clear";
@@ -83,10 +83,6 @@ fn print_standup_data() {
     }
 }
 
-fn print_invalid_command() {
-    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
-}
-
 fn print_help_information() {
     println!("\nRunning \"laydown\" without passing any arguments will display your Standup\n");
     println!("Usage: laydown <command> \"<item>\"\n");
@@ -100,4 +96,8 @@ fn print_help_information() {
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
     println!("help                 Display this message\n");
+}
+
+fn print_invalid_command() {
+    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
 }

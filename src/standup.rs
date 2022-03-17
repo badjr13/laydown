@@ -33,3 +33,11 @@ impl Standup {
         data_file::write_to_ron_file(self);
     }
 }
+
+// Clippy recommended I do this but I don't understand why yet.
+// See: https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/new_without_default.rs
+impl Default for Standup {
+    fn default() -> Self {
+        Self::new()
+    }
+}
