@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 
 use crate::data_file;
 use crate::{BL, BLOCKER, DI, DID, DO, DOING, SB, SIDEBAR};
@@ -21,7 +22,7 @@ impl Standup {
         }
     }
 
-    pub fn add_item(mut self, command: &str, item: &str) {
+    pub fn add_item(mut self, file: PathBuf, command: &str, item: &str) {
         match command {
             DID | DI => self.did.push(String::from(item)),
             DOING | DO => self.doing.push(String::from(item)),
@@ -30,7 +31,7 @@ impl Standup {
             _ => println!("Not a valid command."),
         };
 
-        data_file::write_to_ron_file(self);
+        data_file::write_to_file(file, self);
     }
 }
 
