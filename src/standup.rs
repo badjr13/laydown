@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::path::Path;
 
 use crate::data_file;
+use crate::print_standup_data;
 use crate::{BL, BLOCKER, DI, DID, DO, DOING, SB, SIDEBAR};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -22,7 +23,7 @@ impl Standup {
         }
     }
 
-    pub fn add_item(mut self, file: PathBuf, command: &str, item: &str) {
+    pub fn add_item(mut self, file: &Path, command: &str, item: &str) {
         match command {
             DID | DI => self.did.push(String::from(item)),
             DOING | DO => self.doing.push(String::from(item)),
@@ -32,6 +33,7 @@ impl Standup {
         };
 
         data_file::write_to_file(file, self);
+        print_standup_data(file)
     }
 }
 

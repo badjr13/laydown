@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 pub mod data_file;
 mod standup;
@@ -31,23 +31,23 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         // This should never happen. The name of the binary
         // is always the first element of env::args
         0 => panic!("Something went horribly wrong."),
-        1 => print_standup_data(file),
+        1 => print_standup_data(&file),
         2 => match arguments[1].as_str() {
-            CLEAR => data_file::clear_data_from_file(file),
-            EDIT => data_file::manually_edit_file(file, "vi"),
+            CLEAR => data_file::clear_data_from_file(&file),
+            EDIT => data_file::manually_edit_file(&file, "vi"),
             HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3 => {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
-            let standup = data_file::read_from_file(file);
+            let standup = data_file::read_from_file(&file);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
                     // TODO! Fix Using Moved Value error below
-                    standup.add_item(file, command, user_input)
+                    standup.add_item(&file, command, user_input)
                 }
-                EDIT => data_file::manually_edit_file(file, user_input),
+                EDIT => data_file::manually_edit_file(&file, user_input),
                 _ => print_invalid_command(),
             }
         }
@@ -55,7 +55,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
     }
 }
 
-fn print_standup_data(file: PathBuf) {
+fn print_standup_data(file: &Path) {
     let standup = data_file::read_from_file(file);
 
     println!();
