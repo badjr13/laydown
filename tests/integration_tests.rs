@@ -1,24 +1,15 @@
-use laydown::data_file;
 use laydown::parse_arguments;
+use laydown::Env;
 
 #[test]
-fn test_did() {}
+#[should_panic(expected = "Something went horribly wrong.")]
+fn test_app_failed_to_run() {
+    let arguments = vec![];
+    parse_arguments(arguments, Env::Test);
+}
 
-fn get_path_to_test_file() -> PathBuf {
-    let test_config_directory = dirs::config_dir()
-        .expect("Failed to find laydown test directory")
-        .join("test_laydown");
-
-    fs::create_dir(&laydown_test_directory).ok();
-
-    let test_file_path: PathBuf = test_config_directory.join("test_laydown.ron");
-
-    OpenOptions::new()
-        .create(true)
-        .read(true)
-        .write(true)
-        .open(&ron_file_path)
-        .expect("Failed to find laydown.ron file");
-
-    ron_file_path
+#[test]
+fn test_no_arguments_passed() {
+    let arguments = vec![String::from("name/of/binary/passed/by/default")];
+    parse_arguments(arguments, Env::Test);
 }
