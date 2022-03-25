@@ -23,7 +23,7 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
             ron_data_file = laydown_config_directory.join("laydown.ron");
         }
         Env::Test => {
-            ron_data_file = laydown_config_directory.join("laydown_test.ron");
+            ron_data_file = laydown_config_directory.join("test_laydown.ron");
         }
     }
 
