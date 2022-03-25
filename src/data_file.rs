@@ -10,44 +10,31 @@ use crate::standup::Standup;
 use crate::Env;
 
 pub fn get_path_to_file(env: Env) -> PathBuf {
+    let laydown_config_directory = dirs::config_dir()
+        .expect("Failed to find laydown config directory")
+        .join("laydown");
+
+    fs::create_dir(&laydown_config_directory).ok();
+
+    let ron_data_file: PathBuf;
+
     match env {
         Env::Prod => {
-            let laydown_config_directory = dirs::config_dir()
-                .expect("Failed to find laydown config directory")
-                .join("laydown");
-
-            fs::create_dir(&laydown_config_directory).ok();
-
-            let ron_file_path: PathBuf = laydown_config_directory.join("laydown.ron");
-
-            OpenOptions::new()
-                .create(true)
-                .read(true)
-                .write(true)
-                .open(&ron_file_path)
-                .expect("Failed to find laydown.ron file");
-
-            ron_file_path
+            ron_data_file = laydown_config_directory.join("laydown.ron");
         }
         Env::Test => {
-            let laydown_test_directory = dirs::config_dir()
-                .expect("Failed to find laydown config directory")
-                .join("laydown_test");
-
-            fs::create_dir(&laydown_test_directory).ok();
-
-            let test_file_path: PathBuf = laydown_test_directory.join("laydown_test.ron");
-
-            OpenOptions::new()
-                .create(true)
-                .read(true)
-                .write(true)
-                .open(&test_file_path)
-                .expect("Failed to find laydown.ron file");
-
-            test_file_path
+            ron_data_file = laydown_config_directory.join("laydown_test.ron");
         }
     }
+
+    OpenOptions::new()
+        .create(true)
+        .read(true)
+        .write(true)
+        .open(&ron_data_file)
+        .expect("Failed to find laydown.ron file");
+
+    ron_data_file
 }
 
 pub fn read_from_file(file: &Path) -> Standup {
