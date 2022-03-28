@@ -38,7 +38,7 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 }
 
 pub fn read_from_file(file: &Path) -> Standup {
-    let content = fs::read_to_string(file).expect("Failed to read content from laydown.ron");
+    let content = fs::read_to_string(file).expect("Failed to read content from data file.");
 
     let deserialized_content: Standup = match ron::from_str(&content) {
         Ok(_deserialized_content) => _deserialized_content,
