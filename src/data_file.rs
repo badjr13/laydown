@@ -1,46 +1,44 @@
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::ErrorKind;
+use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
 
 use crate::standup::Standup;
 
-fn get_path_to_ron_file() -> PathBuf {
+use crate::Env;
+
+pub fn get_path_to_file(env: Env) -> PathBuf {
     let laydown_config_directory = dirs::config_dir()
         .expect("Failed to find laydown config directory")
         .join("laydown");
 
     fs::create_dir(&laydown_config_directory).ok();
 
-    let ron_file_path: PathBuf = laydown_config_directory.join("laydown.ron");
+    let ron_data_file: PathBuf;
+
+    match env {
+        Env::Prod => {
+            ron_data_file = laydown_config_directory.join("laydown.ron");
+        }
+        Env::Test => {
+            ron_data_file = laydown_config_directory.join("test_laydown.ron");
+        }
+    }
 
     OpenOptions::new()
         .create(true)
         .read(true)
         .write(true)
-        .open(&ron_file_path)
+        .open(&ron_data_file)
         .expect("Failed to find laydown.ron file");
 
-    ron_file_path
+    ron_data_file
 }
 
-#[test]
-fn test_get_path_to_ron_file() {
-    let result: PathBuf = get_path_to_ron_file();
-
-    let expected: PathBuf = dirs::config_dir()
-        .unwrap()
-        .join("laydown")
-        .join("laydown.ron");
-
-    assert_eq!(result.to_str().unwrap(), expected.to_str().unwrap());
-}
-
-pub fn read_from_ron_file() -> Standup {
-    let file = get_path_to_ron_file();
-
-    let content = fs::read_to_string(file).expect("Failed to read content from laydown.ron");
+pub fn read_from_file(file: &Path) -> Standup {
+    let content = fs::read_to_string(file).expect("Failed to read content from data file.");
 
     let deserialized_content: Standup = match ron::from_str(&content) {
         Ok(_deserialized_content) => _deserialized_content,
@@ -58,9 +56,7 @@ pub fn read_from_ron_file() -> Standup {
     deserialized_content
 }
 
-pub fn write_to_ron_file(data: Standup) {
-    let file = get_path_to_ron_file();
-
+pub fn write_to_file(file: &Path, data: Standup) {
     let warning = "// Do not rename or delete arrays. Only update elements.\n".to_string();
 
     let standup_data = ron::ser::to_string_pretty(&data, ron::ser::PrettyConfig::default())
@@ -71,9 +67,7 @@ pub fn write_to_ron_file(data: Standup) {
     fs::write(file, content).expect("Failed to write to laydown.ron");
 }
 
-pub fn manually_edit_ron_file(editor: &str) {
-    let file = get_path_to_ron_file();
-
+pub fn manually_edit_file(file: &Path, editor: &str) {
     match Command::new(editor).arg(file).status() {
         Ok(edit_file) => edit_file,
         Err(error) => match error.kind() {
@@ -83,9 +77,7 @@ pub fn manually_edit_ron_file(editor: &str) {
     };
 }
 
-pub fn clear_data_from_ron_file() {
-    let file = get_path_to_ron_file();
-
+pub fn clear_data_from_file(file: &Path) {
     OpenOptions::new()
         .write(true)
         .truncate(true)

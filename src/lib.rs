@@ -1,3 +1,5 @@
+use std::path::Path;
+
 pub mod data_file;
 mod standup;
 
@@ -17,27 +19,35 @@ const BL: &str = "bl";
 const SIDEBAR: &str = "sidebar";
 const SB: &str = "sb";
 
-pub fn parse_arguments(arguments: Vec<String>) {
+pub enum Env {
+    Prod,
+    Test,
+}
+
+pub fn parse_arguments(arguments: Vec<String>, env: Env) {
+    let file = data_file::get_path_to_file(env);
+
     match arguments.len() {
         // This should never happen. The name of the binary
         // is always the first element of env::args
         0 => panic!("Something went horribly wrong."),
-        1 => print_standup_data(),
+        1 => print_standup_data(&file),
         2 => match arguments[1].as_str() {
-            CLEAR => data_file::clear_data_from_ron_file(),
-            EDIT => data_file::manually_edit_ron_file("vi"),
+            CLEAR => data_file::clear_data_from_file(&file),
+            EDIT => data_file::manually_edit_file(&file, "vi"),
             HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3 => {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
-            let standup = data_file::read_from_ron_file();
+            let standup = data_file::read_from_file(&file);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
-                    standup.add_item(command, user_input)
+                    // TODO! Fix Using Moved Value error below
+                    standup.add_item(&file, command, user_input)
                 }
-                EDIT => data_file::manually_edit_ron_file(user_input),
+                EDIT => data_file::manually_edit_file(&file, user_input),
                 _ => print_invalid_command(),
             }
         }
@@ -45,8 +55,8 @@ pub fn parse_arguments(arguments: Vec<String>) {
     }
 }
 
-fn print_standup_data() {
-    let standup = data_file::read_from_ron_file();
+fn print_standup_data(file: &Path) {
+    let standup = data_file::read_from_file(file);
 
     println!();
 
