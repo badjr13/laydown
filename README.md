@@ -1,6 +1,6 @@
 # laydown
 
-`laydown` is a simple CLI application to help you prepare for your next Daily Stand Up. No longer shall your named be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.
+`laydown` is a simple CLI application to help you prepare for your next Daily Stand Up. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.
 
 ```
 $ laydown
