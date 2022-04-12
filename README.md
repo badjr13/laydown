@@ -6,8 +6,8 @@
 $ laydown
 
 DID:
-- Reviewed George's pull request
-- Wrote integration tests for new endpoint
+- Reviewed Adam's pull request
+- Wrote tests for new endpoint
 
 DOING:
 - Writing a script to automate database backups
