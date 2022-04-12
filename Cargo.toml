@@ -4,15 +4,15 @@ version = "0.1.0"
 edition = "2021"
 authors = ["badjr13"]
 license = "MIT"
-description = "Always know what you're going to say at Daily Standup!"
+description = "Always know what you're going to say at Daily Standup."
 readme = "README.md"
 repository = "https://github.com/badjr13/laydown"
-keywords = ["cli", "standup"]
+keywords = ["cli", "standup", "agile", "scrum", "kanban"]
 categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dirs = "4.0.0"
-ron  = "0.7.0"
+dirs  = "4.0.0"
+ron   = "0.7.0"
 serde = { version = "1", features = ["derive"] }
