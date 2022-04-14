@@ -20,7 +20,9 @@ SIDEBARS:
 ```
 
 ### How to Install
-Install instructions coming soon.
+```
+cargo install laydown
+```
 
 ### How to Use
 ```
