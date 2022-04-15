@@ -19,6 +19,9 @@ const BL: &str = "bl";
 const SIDEBAR: &str = "sidebar";
 const SB: &str = "sb";
 
+const UNDO: &str = "undo";
+const UN: &str = "un";
+
 pub enum Env {
     Prod,
     Test,
@@ -36,6 +39,10 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             CLEAR => data_file::clear_data_from_file(&file),
             EDIT => data_file::manually_edit_file(&file, "vi"),
             HELP => print_help_information(),
+            UNDO | UN => {
+                let standup = data_file::read_from_file(&file);
+                standup.undo(&file);
+            },
             _ => print_invalid_command(),
         },
         3 => {
