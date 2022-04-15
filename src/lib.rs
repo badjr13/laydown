@@ -6,6 +6,7 @@ mod standup;
 const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
 const HELP: &str = "help";
+const DASH_HELP: &str = "--help";
 
 const DID: &str = "did";
 const DI: &str = "di";
@@ -42,7 +43,8 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             UNDO | UN => {
                 let standup = data_file::read_from_file(&file);
                 standup.undo(&file);
-            },
+            }
+            HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3 => {
