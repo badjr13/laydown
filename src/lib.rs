@@ -6,6 +6,7 @@ mod standup;
 const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
 const HELP: &str = "help";
+const DASH_HELP: &str = "--help";
 
 const DID: &str = "did";
 const DI: &str = "di";
@@ -35,7 +36,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         2 => match arguments[1].as_str() {
             CLEAR => data_file::clear_data_from_file(&file),
             EDIT => data_file::manually_edit_file(&file, "vi"),
-            HELP => print_help_information(),
+            HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3 => {
