@@ -16,16 +16,12 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 
     fs::create_dir(&laydown_config_directory).ok();
 
-    let ron_data_file: PathBuf;
+    // let ron_data_file: PathBuf;
 
-    match env {
-        Env::Prod => {
-            ron_data_file = laydown_config_directory.join("laydown.ron");
-        }
-        Env::Test => {
-            ron_data_file = laydown_config_directory.join("test_laydown.ron");
-        }
-    }
+    let ron_data_file: PathBuf = match env {
+        Env::Prod => laydown_config_directory.join("laydown.ron"),
+        Env::Test => laydown_config_directory.join("test_laydown.ron"),
+    };
 
     OpenOptions::new()
         .create(true)
