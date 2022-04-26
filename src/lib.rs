@@ -1,3 +1,4 @@
+use std::env;
 use std::path::Path;
 
 pub mod data_file;
@@ -56,7 +57,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
                     // TODO! Fix Using Moved Value error below
                     standup.add_item(&file, command, user_input)
                 }
-                EDIT => data_file::manually_edit_file(&file, user_input),
+                EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
                 _ => print_invalid_command(),
             }
         }
@@ -114,7 +115,7 @@ fn print_help_information() {
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
-    println!("help                 Display this message\n");
+    println!("help, --help         Display this message\n");
 }
 
 fn print_invalid_command() {

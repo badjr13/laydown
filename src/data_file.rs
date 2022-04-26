@@ -16,8 +16,6 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 
     fs::create_dir(&laydown_config_directory).ok();
 
-    // let ron_data_file: PathBuf;
-
     let ron_data_file: PathBuf = match env {
         Env::Prod => laydown_config_directory.join("laydown.ron"),
         Env::Test => laydown_config_directory.join("test_laydown.ron"),
@@ -63,7 +61,7 @@ pub fn write_to_file(file: &Path, data: Standup) {
     fs::write(file, content).expect("Failed to write to laydown.ron");
 }
 
-pub fn manually_edit_file(file: &Path, editor: &str) {
+pub fn manually_edit_file(file: &Path, editor: String) {
     match Command::new(editor).arg(file).status() {
         Ok(edit_file) => edit_file,
         Err(error) => match error.kind() {
