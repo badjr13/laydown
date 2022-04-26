@@ -1,3 +1,4 @@
+use std::env;
 use std::path::Path;
 
 pub mod data_file;
@@ -33,12 +34,16 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         // is always the first element of env::args
         0 => panic!("Something went horribly wrong."),
         1 => print_standup_data(&file),
-        2 => match arguments[1].as_str() {
-            CLEAR => data_file::clear_data_from_file(&file),
-            EDIT => data_file::manually_edit_file(&file, "vi"),
-            HELP | DASH_HELP => print_help_information(),
-            _ => print_invalid_command(),
-        },
+        2 => {
+            let default_editor =
+                env::var("EDITOR").expect("No $EDITOR environment variable found.");
+            match arguments[1].as_str() {
+                CLEAR => data_file::clear_data_from_file(&file),
+                EDIT => data_file::manually_edit_file(&file, default_editor),
+                HELP | DASH_HELP => print_help_information(),
+                _ => print_invalid_command(),
+            }
+        }
         3 => {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
@@ -48,7 +53,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
                     // TODO! Fix Using Moved Value error below
                     standup.add_item(&file, command, user_input)
                 }
-                EDIT => data_file::manually_edit_file(&file, user_input),
+                EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
                 _ => print_invalid_command(),
             }
         }
@@ -106,7 +111,7 @@ fn print_help_information() {
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
-    println!("help                 Display this message\n");
+    println!("help, --help         Display this message\n");
 }
 
 fn print_invalid_command() {
