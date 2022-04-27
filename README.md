@@ -44,5 +44,5 @@ edit <editor>        Directly access data displayed in your Standup.
                      This can be used to edit or delete existing entries.
                      Will use VI by default if no editor is provided.
 
-help                 Display this message
+help, --help         Display this message
 ```
