@@ -6,6 +6,7 @@ mod standup;
 
 const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
+
 const HELP: &str = "help";
 const DASH_HELP: &str = "--help";
 
@@ -39,8 +40,10 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         1 => print_standup_data(&file),
         2 => match arguments[1].as_str() {
             CLEAR => data_file::clear_data_from_file(&file),
-            EDIT => data_file::manually_edit_file(&file, "vi"),
-            HELP => print_help_information(),
+            EDIT => {
+                let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
+                data_file::manually_edit_file(&file, default_editor)
+            }
             UNDO | UN => {
                 let standup = data_file::read_from_file(&file);
                 standup.undo(&file);
@@ -54,7 +57,6 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             let standup = data_file::read_from_file(&file);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
-                    // TODO! Fix Using Moved Value error below
                     standup.add_item(&file, command, user_input)
                 }
                 EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
