@@ -52,9 +52,9 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         3 => {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
-            let standup = data_file::read_from_file(&file);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
+                    let standup = data_file::read_from_file(&file);
                     standup.add_item(&file, command, user_input)
                 }
                 EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
