@@ -25,38 +25,38 @@ impl Standup {
         }
     }
 
-    pub fn undo(mut self, file: &Path) {
-        match self.history.pop().expect("No history available").as_str() {
-            DI => self.did.pop(),
-            DO => self.doing.pop(),
-            BL => self.blockers.pop(),
-            SB => self.sidebars.pop(),
-            _ => println!("Invalid history")
-        }
+    pub fn add_item(mut self, file: &Path, command: &str, item: &str) {
+        match command {
+            DID | DI => {
+                self.did.push(String::from(item));
+                self.history.push(DID.to_string());
+            }
+            DOING | DO => {
+                self.doing.push(String::from(item));
+                self.history.push(DOING.to_string());
+            }
+            BLOCKER | BL => {
+                self.blockers.push(String::from(item));
+                self.history.push(BLOCKER.to_string());
+            }
+            SIDEBAR | SB => {
+                self.sidebars.push(String::from(item));
+                self.history.push(SIDEBAR.to_string());
+            }
+            _ => println!("Not a valid command."),
+        };
 
         data_file::write_to_file(file, self);
         print_standup_data(file)
     }
 
-    pub fn add_item(mut self, file: &Path, command: &str, item: &str) {
-        match command {
-            DID | DI => {
-                self.did.push(String::from(item));
-                self.history.push(DI.to_string());
-            },
-            DOING | DO => {
-                self.doing.push(String::from(item));
-                self.history.push(DO.to_string());
-            },
-            BLOCKER | BL => {
-                self.blockers.push(String::from(item));
-                self.history.push(BL.to_string());
-            },
-            SIDEBAR | SB => {
-                self.sidebars.push(String::from(item));
-                self.history.push(SB.to_string());
-            },
-            _ => println!("Not a valid command."),
+    pub fn undo(mut self, file: &Path) {
+        match self.history.pop().expect("No history available").as_str() {
+            DID | DI => self.did.pop(),
+            DOING | DO => self.doing.pop(),
+            BLOCKER | BL => self.blockers.pop(),
+            SIDEBAR | SB => self.sidebars.pop(),
+            _ => Some("Invalid History".to_string()),
         };
 
         data_file::write_to_file(file, self);
