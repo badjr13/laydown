@@ -6,6 +6,8 @@ mod standup;
 
 const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
+const UNDO: &str = "undo";
+
 const HELP: &str = "help";
 const DASH_HELP: &str = "--help";
 
@@ -40,15 +42,19 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
                 let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
                 data_file::manually_edit_file(&file, default_editor)
             }
+            UNDO => {
+                let standup = data_file::read_from_file(&file);
+                standup.undo(&file);
+            }
             HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3 => {
             let command = arguments[1].as_str();
             let user_input = arguments[2].as_str();
-            let standup = data_file::read_from_file(&file);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
+                    let standup = data_file::read_from_file(&file);
                     standup.add_item(&file, command, user_input)
                 }
                 EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
@@ -109,6 +115,10 @@ fn print_help_information() {
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
+<<<<<<< HEAD
+=======
+    println!("undo                 Remove last item added to your Standup.\n");
+>>>>>>> loginn-feature/undo
     println!("help, --help         Display this message\n");
 }
 
