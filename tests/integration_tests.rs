@@ -68,3 +68,30 @@ fn test_clear() {
 
     delete_test_data_file();
 }
+
+#[test]
+#[should_panic(expected = "No history available")]
+fn test_undo() {
+    let test_data = "test item added to blockers";
+
+    let arguments = vec![
+        FAKE.to_string(),
+        "blocker".to_string(),
+        test_data.to_string(),
+    ];
+    parse_arguments(arguments, Env::Test);
+
+    let standup = data_file::read_from_file(&test_file());
+    assert_eq!(standup.blockers.len(), 1);
+    assert_eq!(standup.blockers[0], test_data.to_string());
+
+    let arguments_for_undo = vec![FAKE.to_string(), "undo".to_string()];
+    parse_arguments(arguments_for_undo, Env::Test);
+
+    let standup = data_file::read_from_file(&test_file());
+    assert_eq!(standup.blockers.len(), 0);
+
+    // Panic starts here
+    let arguments_for_undo = vec![FAKE.to_string(), "undo".to_string()];
+    parse_arguments(arguments_for_undo, Env::Test);
+}
