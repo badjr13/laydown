@@ -115,10 +115,7 @@ fn print_help_information() {
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
-<<<<<<< HEAD
-=======
     println!("undo                 Remove last item added to your Standup.\n");
->>>>>>> loginn-feature/undo
     println!("help, --help         Display this message\n");
 }
 
