@@ -50,7 +50,7 @@ pub fn read_from_file(file: &Path) -> Standup {
     deserialized_content
 }
 
-pub fn write_to_file(file: &Path, data: Standup) {
+pub fn write_to_file(file: &Path, data: &Standup) {
     let warning = "// Do not rename or delete arrays. Only update elements.\n".to_string();
 
     let standup_data = ron::ser::to_string_pretty(&data, ron::ser::PrettyConfig::default())
