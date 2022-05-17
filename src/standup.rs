@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
 use std::path::Path;
 
 use crate::data_file;
-use crate::print_standup_data;
 use crate::{BL, BLOCKER, DI, DID, DO, DOING, SB, SIDEBAR};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Standup {
     pub did: Vec<String>,
     pub doing: Vec<String>,
@@ -46,8 +46,8 @@ impl Standup {
             _ => println!("Not a valid command."),
         };
 
-        data_file::write_to_file(file, self);
-        print_standup_data(file)
+        data_file::write_to_file(file, &self);
+        print!("{}", self);
     }
 
     pub fn undo(mut self, file: &Path) {
@@ -59,8 +59,48 @@ impl Standup {
             _ => Some("Invalid History".to_string()),
         };
 
-        data_file::write_to_file(file, self);
-        print_standup_data(file)
+        data_file::write_to_file(file, &self);
+        print!("{}", self);
+    }
+}
+
+impl fmt::Display for Standup {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f)?;
+
+        if !&self.did.is_empty() {
+            writeln!(f, "DID:")?;
+            for item in &self.did {
+                writeln!(f, "- {}", item)?;
+            }
+            writeln!(f)?;
+        }
+
+        if !&self.doing.is_empty() {
+            writeln!(f, "DOING:")?;
+            for item in &self.doing {
+                writeln!(f, "- {}", item)?;
+            }
+            writeln!(f)?;
+        }
+
+        if !&self.blockers.is_empty() {
+            writeln!(f, "BLOCKERS:")?;
+            for item in &self.blockers {
+                writeln!(f, "- {}", item)?;
+            }
+            writeln!(f)?;
+        }
+
+        if !&self.sidebars.is_empty() {
+            writeln!(f, "SIDEBARS:")?;
+            for item in &self.sidebars {
+                writeln!(f, "- {}", item)?;
+            }
+            writeln!(f)?;
+        }
+
+        Ok(())
     }
 }
 

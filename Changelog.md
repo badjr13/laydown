@@ -5,11 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-*empty*
+### Added
+- Implement Display on Standup struct
 
 ## [1.2.0] - 2022-05-04
 ### Added
-- Added ability to `undo`
+- Add ability to `undo`
 
 ### Fixed
 - App would crash if `EDITOR` environment variable is not set
