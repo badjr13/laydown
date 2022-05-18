@@ -5,15 +5,20 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
 
+use chrono::Utc;
+
 use crate::standup::Standup;
 
 use crate::Env;
 
-pub fn get_path_to_file(env: Env) -> PathBuf {
-    let laydown_config_directory = dirs::config_dir()
+pub fn get_laydown_config_directory() -> PathBuf {
+    dirs::config_dir()
         .expect("Failed to find laydown config directory")
-        .join("laydown");
+        .join("laydown")
+}
 
+pub fn get_path_to_file(env: Env) -> PathBuf {
+    let laydown_config_directory = get_laydown_config_directory();
     fs::create_dir(&laydown_config_directory).ok();
 
     let ron_data_file: PathBuf = match env {
@@ -77,4 +82,27 @@ pub fn clear_data_from_file(file: &Path) {
         .truncate(true)
         .open(file)
         .expect("Failed to erase existing data from laydown.ron");
+}
+
+fn get_date_and_format() -> String {
+    let current_date = Utc::now();
+    current_date.format("%Y-%m-%d").to_string()
+}
+
+pub fn archive(file: &Path) {
+    let laydown_config_directory = get_laydown_config_directory();
+    let archive_directory = laydown_config_directory.join("archive");
+    fs::create_dir(&archive_directory).ok();
+
+    let date = get_date_and_format();
+    let file_name = format!("{}.txt", date);
+
+    let testaroo = archive_directory.join(file_name);
+
+    OpenOptions::new()
+        .create(true)
+        .read(true)
+        .write(true)
+        .open(testaroo)
+        .expect("Failed to find archive directory.");
 }

@@ -6,6 +6,7 @@ mod standup;
 const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
 const UNDO: &str = "undo";
+const ARCHIVE: &str = "archive";
 
 const HELP: &str = "help";
 const DASH_HELP: &str = "--help";
@@ -43,6 +44,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
                 data_file::manually_edit_file(&file, default_editor)
             }
             UNDO => standup.undo(&file),
+            ARCHIVE => data_file::archive(&file),
             HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
