@@ -46,5 +46,9 @@ edit <editor>        Directly access data displayed in your Standup.
 
 undo                 Remove last item added to your Standup.
 
+archive              Archive today's Standup. Found in /laydown config directory.
+                     For more info on config directory location, visit:
+                     https://docs.rs/dirs/4.0.0/dirs/fn.config_dir.html
+
 help, --help         Display this message
 ```

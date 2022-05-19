@@ -76,6 +76,9 @@ fn print_help_information() {
     println!("                     This can be used to edit or delete existing entries.");
     println!("                     Will use VI by default if no editor is provided.\n");
     println!("undo                 Remove last item added to your Standup.\n");
+    println!("archive              Archive today's Standup. Found in /laydown config directory.");
+    println!("                     For more info on config directory location, visit:");
+    println!("                     https://docs.rs/dirs/4.0.0/dirs/fn.config_dir.html\n");
     println!("help, --help         Display this message\n");
 }
 
