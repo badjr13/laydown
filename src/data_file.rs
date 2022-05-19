@@ -5,7 +5,7 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
 
-use chrono::Utc;
+use chrono::Local;
 
 use crate::standup::Standup;
 
@@ -84,25 +84,17 @@ pub fn clear_data_from_file(file: &Path) {
         .expect("Failed to erase existing data from laydown.ron");
 }
 
-fn get_date_and_format() -> String {
-    let current_date = Utc::now();
-    current_date.format("%Y-%m-%d").to_string()
-}
-
 pub fn archive(file: &Path) {
     let laydown_config_directory = get_laydown_config_directory();
     let archive_directory = laydown_config_directory.join("archive");
     fs::create_dir(&archive_directory).ok();
 
-    let date = get_date_and_format();
+    let date = Local::now().format("%Y-%m-%d").to_string();
+
     let file_name = format!("{}.txt", date);
+    let full_path = archive_directory.join(file_name);
 
-    let testaroo = archive_directory.join(file_name);
+    let standup: Standup = read_from_file(file);
 
-    OpenOptions::new()
-        .create(true)
-        .read(true)
-        .write(true)
-        .open(testaroo)
-        .expect("Failed to find archive directory.");
+    fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
 }

@@ -66,8 +66,6 @@ impl Standup {
 
 impl fmt::Display for Standup {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f)?;
-
         if !&self.did.is_empty() {
             writeln!(f, "DID:")?;
             for item in &self.did {
