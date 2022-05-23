@@ -7,6 +7,7 @@ const CLEAR: &str = "clear";
 const EDIT: &str = "edit";
 const UNDO: &str = "undo";
 const ARCHIVE: &str = "archive";
+const CONFIG_DIR: &str = "config-dir";
 
 const HELP: &str = "help";
 const DASH_HELP: &str = "--help";
@@ -45,6 +46,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             }
             UNDO => standup.undo(&file),
             ARCHIVE => data_file::archive(&file),
+            CONFIG_DIR => println!("{}", data_file::get_laydown_config_directory().display()),
             HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
@@ -77,8 +79,7 @@ fn print_help_information() {
     println!("                     Will use VI by default if no editor is provided.\n");
     println!("undo                 Remove last item added to your Standup.\n");
     println!("archive              Archive today's Standup. Found in /laydown config directory.");
-    println!("                     For more info on config directory location, visit:");
-    println!("                     https://docs.rs/dirs/4.0.0/dirs/fn.config_dir.html\n");
+    println!("config-dir           Print location of laydown config directory.\n");
     println!("help, --help         Display this message\n");
 }
 
