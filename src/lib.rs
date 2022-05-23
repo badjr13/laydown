@@ -73,12 +73,12 @@ fn print_help_information() {
     println!("do, doing    <item>  Add item to DOING section of your Standup");
     println!("bl, blocker  <item>  Add item to BLOCKERS section of your Standup");
     println!("sb, sidebar  <item>  Add item to SIDEBARS section of your Standup\n");
-    println!("clear                Remove all items from your Standup\n");
+    println!("clear                Remove all items from your Standup");
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
-    println!("                     Will use VI by default if no editor is provided.\n");
+    println!("                     Will use VI by default if no editor is provided.");
     println!("undo                 Remove last item added to your Standup.\n");
-    println!("archive              Archive today's Standup. Found in /laydown config directory.");
+    println!("archive              Archive today's Standup. Found in laydown config directory.");
     println!("config-dir           Print location of laydown config directory.\n");
     println!("help, --help         Display this message\n");
 }

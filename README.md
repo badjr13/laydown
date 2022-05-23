@@ -39,16 +39,13 @@ bl, blocker  <item>  Add item to BLOCKERS section of your Standup
 sb, sidebar  <item>  Add item to SIDEBARS section of your Standup
 
 clear                Remove all items from your Standup
-
 edit <editor>        Directly access data displayed in your Standup.
                      This can be used to edit or delete existing entries.
                      Will use VI by default if no editor is provided.
-
 undo                 Remove last item added to your Standup.
 
-archive              Archive today's Standup. Found in /laydown config directory.
-                     For more info on config directory location, visit:
-                     https://docs.rs/dirs/4.0.0/dirs/fn.config_dir.html
+archive              Archive today's Standup. Found in laydown config directory.
+config-dir           Print location of laydown config directory.
 
 help, --help         Display this message
 ```
