@@ -50,6 +50,31 @@ fn test_add_item() {
 }
 
 #[test]
+fn test_add_multiple_items() {
+    let test_item_1 = "test item 1";
+    let test_item_2 = "test item 2";
+    let test_item_3 = "test item 3";
+
+    let arguments = vec![
+        FAKE.to_string(),
+        "doing".to_string(),
+        test_item_1.to_string(),
+        test_item_2.to_string(),
+        test_item_3.to_string(),
+    ];
+    parse_arguments(arguments, Env::Test);
+
+    let standup = data_file::read_from_file(&test_file());
+
+    assert_eq!(standup.doing.len(), 3);
+    assert_eq!(standup.doing[0], test_item_1);
+    assert_eq!(standup.doing[1], test_item_2);
+    assert_eq!(standup.doing[2], test_item_3);
+
+    delete_test_data_file();
+}
+
+#[test]
 fn test_clear() {
     let test_data = "test item added to doing";
 

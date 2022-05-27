@@ -25,23 +25,31 @@ impl Standup {
         }
     }
 
-    pub fn add_item(mut self, file: &Path, command: &str, item: &str) {
+    pub fn add_item(mut self, file: &Path, command: &str, items: Vec<String>) {
         match command {
             DID | DI => {
-                self.did.push(String::from(item));
-                self.history.push(DID.to_string());
+                for item in items {
+                    self.did.push(item);
+                    self.history.push(DID.to_string());
+                }
             }
             DOING | DO => {
-                self.doing.push(String::from(item));
-                self.history.push(DOING.to_string());
+                for item in items {
+                    self.doing.push(item);
+                    self.history.push(DOING.to_string());
+                }
             }
             BLOCKER | BL => {
-                self.blockers.push(String::from(item));
-                self.history.push(BLOCKER.to_string());
+                for item in items {
+                    self.blockers.push(item);
+                    self.history.push(BLOCKER.to_string());
+                }
             }
             SIDEBAR | SB => {
-                self.sidebars.push(String::from(item));
-                self.history.push(SIDEBAR.to_string());
+                for item in items {
+                    self.sidebars.push(item);
+                    self.history.push(SIDEBAR.to_string());
+                }
             }
             _ => println!("Not a valid command."),
         };
@@ -66,7 +74,6 @@ impl Standup {
 
 impl fmt::Display for Standup {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-
         writeln!(f, "DID:")?;
         if !&self.did.is_empty() {
             for item in &self.did {
