@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add ability to print out location of config directory
 - Create view for empty sections
+- Add ability to create multiple items at once
 
 ## [1.3.0] - 2022-05-18
 ### Added

@@ -13,7 +13,7 @@ DOING:
 - Writing a script to automate database backups
 
 BLOCKERS:
-- Waiting on admin access to production server
+**empty**
 
 SIDEBARS:
 - Discuss re-writing everything in Rust with team
@@ -30,13 +30,15 @@ $ laydown help
 
 Running "laydown" without passing any arguments will display your Standup
 
-Usage: laydown <command> "<item>"
+Usage: laydown <command> "<item>" "<item>"
 
 Available commands:
 di, did      <item>  Add item to DID section of your Standup
 do, doing    <item>  Add item to DOING section of your Standup
 bl, blocker  <item>  Add item to BLOCKERS section of your Standup
 sb, sidebar  <item>  Add item to SIDEBARS section of your Standup
+
+                     TIP: Multiple space separated items can be added.
 
 clear                Remove all items from your Standup
 edit <editor>        Directly access data displayed in your Standup.

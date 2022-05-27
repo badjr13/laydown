@@ -50,14 +50,14 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
-        3 => {
+        3.. => {
             let command = arguments[1].as_str();
-            let user_input = arguments[2].as_str();
+            let (_, user_input) = arguments.split_at(2);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
-                    standup.add_item(&file, command, user_input)
+                    standup.add_item(&file, command, user_input.to_vec())
                 }
-                EDIT => data_file::manually_edit_file(&file, user_input.to_string()),
+                EDIT => data_file::manually_edit_file(&file, arguments[2].to_string()),
                 _ => print_invalid_command(),
             }
         }
@@ -67,12 +67,13 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
 
 fn print_help_information() {
     println!("\nRunning \"laydown\" without passing any arguments will display your Standup\n");
-    println!("Usage: laydown <command> \"<item>\"\n");
+    println!("Usage: laydown <command> \"<item>\" \"<item>\"\n");
     println!("Available commands:");
     println!("di, did      <item>  Add item to DID section of your Standup");
     println!("do, doing    <item>  Add item to DOING section of your Standup");
     println!("bl, blocker  <item>  Add item to BLOCKERS section of your Standup");
     println!("sb, sidebar  <item>  Add item to SIDEBARS section of your Standup\n");
+    println!("                     TIP: Multiple space separated items can be added.\n");
     println!("clear                Remove all items from your Standup");
     println!("edit <editor>        Directly access data displayed in your Standup.");
     println!("                     This can be used to edit or delete existing entries.");
