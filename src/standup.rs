@@ -66,36 +66,45 @@ impl Standup {
 
 impl fmt::Display for Standup {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+
+        writeln!(f, "DID:")?;
         if !&self.did.is_empty() {
-            writeln!(f, "DID:")?;
             for item in &self.did {
                 writeln!(f, "- {}", item)?;
             }
             writeln!(f)?;
+        } else {
+            writeln!(f, "**empty**\n")?;
         }
 
+        writeln!(f, "DOING:")?;
         if !&self.doing.is_empty() {
-            writeln!(f, "DOING:")?;
             for item in &self.doing {
                 writeln!(f, "- {}", item)?;
             }
             writeln!(f)?;
+        } else {
+            writeln!(f, "**empty**\n")?;
         }
 
+        writeln!(f, "BLOCKERS:")?;
         if !&self.blockers.is_empty() {
-            writeln!(f, "BLOCKERS:")?;
             for item in &self.blockers {
                 writeln!(f, "- {}", item)?;
             }
             writeln!(f)?;
+        } else {
+            writeln!(f, "**empty**\n")?;
         }
 
+        writeln!(f, "SIDEBARS:")?;
         if !&self.sidebars.is_empty() {
-            writeln!(f, "SIDEBARS:")?;
             for item in &self.sidebars {
                 writeln!(f, "- {}", item)?;
             }
             writeln!(f)?;
+        } else {
+            writeln!(f, "**empty**\n")?;
         }
 
         Ok(())
