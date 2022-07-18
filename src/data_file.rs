@@ -39,20 +39,25 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 pub fn read_from_file(file: &Path) -> Standup {
     let content = fs::read_to_string(file).expect("Failed to read content from data file.");
 
-    let deserialized_content: Standup = match ron::from_str(&content) {
-        Ok(_deserialized_content) => _deserialized_content,
-        Err(error) => match error.code {
-            ron::error::ErrorCode::ExpectedStruct => Standup::new(),
-            other_error => {
-                panic!(
-                    "Failed to deserialize content from laydown.ron: {}",
-                    other_error
-                );
-            }
-        },
-    };
-
-    deserialized_content
+    if content.len() == 0 {
+        let new_standup = Standup::new();
+        write_to_file(file, &new_standup);
+        new_standup
+    } else {
+        let deserialized_content: Standup = match ron::from_str(&content) {
+            Ok(_deserialized_content) => _deserialized_content,
+            Err(error) => match error.code {
+                ron::error::ErrorCode::ExpectedStruct => Standup::new(),
+                other_error => {
+                    panic!(
+                        "Failed to deserialize content from laydown.ron: {}",
+                        other_error
+                    );
+                }
+            },
+        };
+        deserialized_content
+    }
 }
 
 pub fn write_to_file(file: &Path, data: &Standup) {
