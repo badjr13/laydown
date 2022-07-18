@@ -1,6 +1,6 @@
 [package]
 name = "laydown"
-version = "1.4.0"
+version = "1.4.1"
 edition = "2021"
 authors = ["badjr13"]
 license = "MIT"
@@ -10,10 +10,8 @@ repository = "https://github.com/badjr13/laydown"
 keywords = ["cli", "standup", "agile", "scrum", "kanban"]
 categories = ["command-line-utilities"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 chrono = "0.4"
-dirs  = "4.0.0"
-ron   = "0.7.0"
+dirs = "4.0.0"
+ron = "0.7.0"
 serde = { version = "1", features = ["derive"] }

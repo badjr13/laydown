@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 *empty*
 
+## [1.4.1] - 2022-07-18
+### Fixed
+-  Fix bug where data file is empty upon initialization
+
 ## [1.4.0] - 2022-05-27
 ### Added
 - Add ability to print out location of config directory
@@ -36,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/badjr13/laydown
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
+[1.4.1]: https://github.com/badjr13/laydown/tree/69b8a22901e3cb639133282b80d7f4c4b19a05c5
 [1.4.0]: https://github.com/badjr13/laydown/tree/0bb487815550b9182398508c22b8134b30844724
 [1.3.0]: https://github.com/badjr13/laydown/tree/f6b23dcdd5b86796831e8e7f81282bb8341aad91
 [1.2.0]: https://github.com/badjr13/laydown/tree/5a10fe65baac320d6a557a66af6372f690c04118
