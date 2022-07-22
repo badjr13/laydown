@@ -47,6 +47,7 @@ edit <editor>        Directly access data displayed in your Standup.
 undo                 Remove last item added to your Standup.
 
 archive              Archive today's Standup. Found in laydown config directory.
+                     Note: Archiving will automatically clear out existing Standup.
 config-dir           Print location of laydown config directory.
 
 help, --help         Display this message
