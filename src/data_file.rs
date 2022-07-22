@@ -99,6 +99,11 @@ pub fn archive(file: &Path) {
     let file_name = format!("{}.txt", date);
     let full_path = archive_directory.join(file_name);
 
+    if full_path.exists() {
+        println!("Archive already exists for today. Delete it before archiving again.");
+        return;
+    }
+
     let standup: Standup = read_from_file(file);
 
     fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
