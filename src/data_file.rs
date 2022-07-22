@@ -102,4 +102,6 @@ pub fn archive(file: &Path) {
     let standup: Standup = read_from_file(file);
 
     fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
+
+    clear_data_from_file(file);
 }

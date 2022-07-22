@@ -80,6 +80,7 @@ fn print_help_information() {
     println!("                     Will use VI by default if no editor is provided.");
     println!("undo                 Remove last item added to your Standup.\n");
     println!("archive              Archive today's Standup. Found in laydown config directory.");
+    println!("                     Note: Archiving will automatically clear out existing Standup.");
     println!("config-dir           Print location of laydown config directory.\n");
     println!("help, --help         Display this message\n");
 }
