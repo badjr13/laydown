@@ -1,6 +1,6 @@
 use std::fs;
 use std::fs::OpenOptions;
-use std::io::ErrorKind;
+use std::io::{stdin, ErrorKind};
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
@@ -39,7 +39,7 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 pub fn read_from_file(file: &Path) -> Standup {
     let content = fs::read_to_string(file).expect("Failed to read content from data file.");
 
-    if content.len() == 0 {
+    if content.is_empty() {
         let new_standup = Standup::new();
         write_to_file(file, &new_standup);
         new_standup
@@ -100,13 +100,22 @@ pub fn archive(file: &Path) {
     let full_path = archive_directory.join(file_name);
 
     if full_path.exists() {
-        println!("Archive already exists for today. Delete it before archiving again.");
-        return;
+        println!("An archive already exists for today. Would you like to overwrite today's existing archive file? (y/n)");
+
+        let mut user_input = String::new();
+
+        stdin()
+            .read_line(&mut user_input)
+            .expect("Type 'y' for yes or 'n' for no.");
+
+        if user_input.trim_end() == "y" {
+            let standup: Standup = read_from_file(file);
+            fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
+            clear_data_from_file(file);
+        } else if user_input.trim_end() == "n" {
+            return;
+        } else {
+            println!("Type 'y' for yes or 'n' for no.");
+        }
     }
-
-    let standup: Standup = read_from_file(file);
-
-    fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
-
-    clear_data_from_file(file);
 }
