@@ -36,28 +36,23 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
     ron_data_file
 }
 
-fn fix_missing_history(s: String, file: &Path) -> Standup {
-    let str_s = s.as_str();
-    match str_s {
-        "missing field `history`" => {
-            let mut fixed_content = String::new();
-            let mut file = OpenOptions::new()
-                .read(true)
-                .write(true)
-                .open(file)
-                .expect("Failed to find laydown.ron file");
+fn fix_missing_history(file: &Path) -> Standup {
+    let mut fixed_content = String::new();
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(file)
+        .expect("Failed to find laydown.ron file");
 
-            file.read_to_string(&mut fixed_content).ok();
-            let pos = fixed_content.rfind(",").unwrap() + 1;
-            fixed_content.insert_str(pos, "history: [],\n");
+    file.read_to_string(&mut fixed_content).ok();
+    let pos = fixed_content.rfind(",").unwrap() + 1;
+    fixed_content.insert_str(pos, "history: [],\n");
 
-            match ron::from_str(&fixed_content) {
-                Ok(_deserialized_content) => _deserialized_content,
-                Err(e) => panic!("Failed to fix laydown.ron: {}", e)
-            }
-        }
-        _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
+    match ron::from_str(&fixed_content) {
+        Ok(_deserialized_content) => _deserialized_content,
+        Err(e) => panic!("Failed to fix laydown.ron: {}", e)
     }
+
 }
 
 pub fn read_from_file(file: &Path) -> Standup {
@@ -73,7 +68,13 @@ pub fn read_from_file(file: &Path) -> Standup {
             Err(error) => match error.code {
                 ron::error::ErrorCode::ExpectedStruct => Standup::new(),
                 ron::error::ErrorCode::Message(s) => {
-                    fix_missing_history(s, file)
+                    let str_s = s.as_str();
+                    match str_s {
+                        "missing field `history`" => {
+                            fix_missing_history(file)
+                        }
+                        _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
+                    }
                 }
                 other_error => {
                     panic!(
