@@ -50,9 +50,8 @@ fn fix_missing_history(file: &Path) -> Standup {
 
     match ron::from_str(&fixed_content) {
         Ok(_deserialized_content) => _deserialized_content,
-        Err(e) => panic!("Failed to fix laydown.ron: {}", e)
+        Err(e) => panic!("Failed to fix laydown.ron: {}", e),
     }
-
 }
 
 pub fn read_from_file(file: &Path) -> Standup {
@@ -70,10 +69,8 @@ pub fn read_from_file(file: &Path) -> Standup {
                 ron::error::ErrorCode::Message(s) => {
                     let str_s = s.as_str();
                     match str_s {
-                        "missing field `history`" => {
-                            fix_missing_history(file)
-                        }
-                        _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
+                        "missing field `history`" => fix_missing_history(file),
+                        _ => panic!("Failed to deserialize content from laydown.ron: {}", s),
                     }
                 }
                 other_error => {
