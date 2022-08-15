@@ -31,20 +31,25 @@ pub enum Env {
 
 pub fn parse_arguments(arguments: Vec<String>, env: Env) {
     let file = data_file::get_path_to_file(env);
-    let standup = data_file::read_from_file(&file);
 
     match arguments.len() {
         // This should never happen. The name of the binary
         // is always the first element of env::args
         0 => panic!("Something went horribly wrong."),
-        1 => print!("{}", standup),
+        1 => {
+            let standup = data_file::read_from_file(&file);
+            print!("{}", standup)
+        }
         2 => match arguments[1].as_str() {
             CLEAR => data_file::clear_data_from_file(&file),
             EDIT => {
                 let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
                 data_file::manually_edit_file(&file, default_editor)
             }
-            UNDO => standup.undo(&file),
+            UNDO => {
+                let standup = data_file::read_from_file(&file);
+                standup.undo(&file)
+            }
             ARCHIVE => data_file::archive(&file),
             CONFIG_DIR => println!("{}", data_file::get_laydown_config_directory().display()),
             HELP | DASH_HELP => print_help_information(),
@@ -55,6 +60,7 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             let (_, user_input) = arguments.split_at(2);
             match command {
                 DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
+                    let standup = data_file::read_from_file(&file);
                     standup.add_item(&file, command, user_input.to_vec())
                 }
                 EDIT => data_file::manually_edit_file(&file, arguments[2].to_string()),
