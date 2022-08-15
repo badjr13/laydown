@@ -45,7 +45,7 @@ fn fix_missing_history(file: &Path) -> Standup {
         .expect("Failed to find laydown.ron file");
 
     file.read_to_string(&mut fixed_content).ok();
-    let pos = fixed_content.rfind(",").unwrap() + 1;
+    let pos = fixed_content.rfind(',').unwrap() + 1;
     fixed_content.insert_str(pos, "history: [],\n");
 
     match ron::from_str(&fixed_content) {
@@ -138,7 +138,6 @@ pub fn archive(file: &Path) {
             fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
             clear_data_from_file(file);
         } else if user_input.trim_end() == "n" {
-            return;
         } else {
             println!("Type 'y' for yes or 'n' for no.");
         }
