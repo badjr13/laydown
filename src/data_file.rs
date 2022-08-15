@@ -1,6 +1,6 @@
 use std::fs;
 use std::fs::OpenOptions;
-use std::io::{stdin, ErrorKind, Read};
+use std::io::{stdin, ErrorKind};
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
@@ -36,55 +36,51 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
     ron_data_file
 }
 
-fn fix_missing_history(file: &Path) -> Standup {
-    let mut fixed_content = String::new();
-    let mut file = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .open(file)
-        .expect("Failed to find laydown.ron file");
+fn fix_missing_history(content: &mut String) -> Standup {
+    let pos = content.rfind(",").expect("File seems broken, please consider fixing it with `laydown edit`") + 1;
+    content.insert_str(pos, "history: [],\n");
 
-    file.read_to_string(&mut fixed_content).ok();
-    let pos = fixed_content.rfind(",").unwrap() + 1;
-    fixed_content.insert_str(pos, "history: [],\n");
-
-    match ron::from_str(&fixed_content) {
+    match ron::from_str(&content) {
         Ok(_deserialized_content) => _deserialized_content,
         Err(e) => panic!("Failed to fix laydown.ron: {}", e)
     }
 
 }
 
-pub fn read_from_file(file: &Path) -> Standup {
-    let content = fs::read_to_string(file).expect("Failed to read content from data file.");
+fn deserialize_ron_file(content: &mut String) -> Standup {
+    let deserialized_content: Standup = match ron::from_str(&content) {
+        Ok(_deserialized_content) => _deserialized_content,
+        Err(error) => match error.code {
+            ron::error::ErrorCode::ExpectedStruct => Standup::new(),
+            ron::error::ErrorCode::Message(s) => {
+                let str_s = s.as_str();
+                match str_s {
+                    "missing field `history`" => {
+                        fix_missing_history(content)
+                    }
+                    _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
+                }
+            }
+            other_error => {
+                panic!(
+                    "Failed to deserialize content from laydown.ron: {}",
+                    other_error
+                );
+            }
+        },
+    };
+    deserialized_content
+}
+
+pub fn get_standup(file: &Path) -> Standup {
+    let mut content = fs::read_to_string(file).expect("Failed to read content from data file.");
 
     if content.is_empty() {
         let new_standup = Standup::new();
         write_to_file(file, &new_standup);
         new_standup
     } else {
-        let deserialized_content: Standup = match ron::from_str(&content) {
-            Ok(_deserialized_content) => _deserialized_content,
-            Err(error) => match error.code {
-                ron::error::ErrorCode::ExpectedStruct => Standup::new(),
-                ron::error::ErrorCode::Message(s) => {
-                    let str_s = s.as_str();
-                    match str_s {
-                        "missing field `history`" => {
-                            fix_missing_history(file)
-                        }
-                        _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
-                    }
-                }
-                other_error => {
-                    panic!(
-                        "Failed to deserialize content from laydown.ron: {}",
-                        other_error
-                    );
-                }
-            },
-        };
-        deserialized_content
+        deserialize_ron_file(&mut content)
     }
 }
 
@@ -137,7 +133,7 @@ pub fn archive(file: &Path) {
             .expect("Type 'y' for yes or 'n' for no.");
 
         if user_input.trim_end() == "y" {
-            let standup: Standup = read_from_file(file);
+            let standup: Standup = get_standup(file);
             fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
             clear_data_from_file(file);
         } else if user_input.trim_end() == "n" {
