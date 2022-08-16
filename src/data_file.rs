@@ -113,7 +113,6 @@ pub fn clear_data_from_file(file: &Path) {
         .expect("Failed to erase existing data from laydown.ron");
 }
 
-#[allow(clippy::needless_return)]
 pub fn archive(file: &Path) {
     let laydown_config_directory = get_laydown_config_directory();
     let archive_directory = laydown_config_directory.join("archive");
@@ -125,22 +124,31 @@ pub fn archive(file: &Path) {
     let full_path = archive_directory.join(file_name);
 
     if full_path.exists() {
-        println!("An archive already exists for today. Would you like to overwrite today's existing archive file? (y/n)");
+        overwrite_existing_archive(file, &full_path);
+    } else {
+        let standup: Standup = get_standup(file);
+        fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
+        clear_data_from_file(file);
+    }
+}
 
-        let mut user_input = String::new();
+#[allow(clippy::needless_return)]
+fn overwrite_existing_archive(file: &Path, full_path: &PathBuf) {
+    println!("An archive already exists for today. Would you like to overwrite today's existing archive file? (y/n)");
 
-        stdin()
-            .read_line(&mut user_input)
-            .expect("Type 'y' for yes or 'n' for no.");
+    let mut user_input = String::new();
 
-        if user_input.trim_end() == "y" {
-            let standup: Standup = get_standup(file);
-            fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
-            clear_data_from_file(file);
-        } else if user_input.trim_end() == "n" {
-            return;
-        } else {
-            println!("Type 'y' for yes or 'n' for no.");
-        }
+    stdin()
+        .read_line(&mut user_input)
+        .expect("Type 'y' for yes or 'n' for no.");
+
+    if user_input.trim_end() == "y" {
+        let standup: Standup = get_standup(file);
+        fs::write(full_path, standup.to_string()).expect("Failed to write archive file.");
+        clear_data_from_file(file);
+    } else if user_input.trim_end() == "n" {
+        return;
+    } else {
+        println!("Type 'y' for yes or 'n' for no.");
     }
 }
