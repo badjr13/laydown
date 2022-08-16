@@ -5,9 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+*empty*
+
+## [1.6.0] - 2022-08-16
+### Added
+- Only deserialize ron data file when needed
+
 ### Fixed
 - Fix archiving bug
-- Only deserialize ron data file when needed
 
 ## [1.5.1] - 2022-08-13
 ### Added
@@ -51,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/badjr13/laydown
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
+[1.6.0]: https://github.com/badjr13/laydown/tree/00fcf6c1385152e5aa2d3a359482e86af194494a
 [1.5.1]: https://github.com/badjr13/laydown/tree/f246b3a9e1d85376967a23b4a7e2c93e1cac81e0
 [1.5.0]: https://github.com/badjr13/laydown/tree/a35ca80390b74b61dcd4771119da74b918b476d7
 [1.4.1]: https://github.com/badjr13/laydown/tree/69b8a22901e3cb639133282b80d7f4c4b19a05c5
