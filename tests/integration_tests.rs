@@ -41,7 +41,7 @@ fn test_add_item() {
     let arguments = vec![FAKE.to_string(), "did".to_string(), test_data.to_string()];
     parse_arguments(arguments, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
 
     assert_eq!(standup.did.len(), 1);
     assert_eq!(standup.did[0], test_data.to_string());
@@ -64,7 +64,7 @@ fn test_add_multiple_items() {
     ];
     parse_arguments(arguments, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
 
     assert_eq!(standup.doing.len(), 3);
     assert_eq!(standup.doing[0], test_item_1);
@@ -81,14 +81,14 @@ fn test_clear() {
     let arguments = vec![FAKE.to_string(), "do".to_string(), test_data.to_string()];
     parse_arguments(arguments, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
     assert_eq!(standup.doing.len(), 1);
     assert_eq!(standup.doing[0], test_data.to_string());
 
     let arguments_for_clear = vec![FAKE.to_string(), "clear".to_string()];
     parse_arguments(arguments_for_clear, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
     assert_eq!(standup.doing.len(), 0);
 
     delete_test_data_file();
@@ -106,14 +106,14 @@ fn test_undo() {
     ];
     parse_arguments(arguments, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
     assert_eq!(standup.blockers.len(), 1);
     assert_eq!(standup.blockers[0], test_data.to_string());
 
     let arguments_for_undo = vec![FAKE.to_string(), "undo".to_string()];
     parse_arguments(arguments_for_undo, Env::Test);
 
-    let standup = data_file::read_from_file(&test_file());
+    let standup = data_file::get_standup(&test_file());
     assert_eq!(standup.blockers.len(), 0);
 
     // Panic starts here
