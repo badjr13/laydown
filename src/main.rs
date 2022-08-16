@@ -1,3 +1,4 @@
+#![warn(clippy::pedantic)]
 use std::env;
 
 use laydown::parse_arguments;

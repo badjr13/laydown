@@ -37,28 +37,28 @@ pub fn get_path_to_file(env: Env) -> PathBuf {
 }
 
 fn fix_missing_history(content: &mut String) -> Standup {
-    let pos = content.rfind(",").expect("File seems broken, please consider fixing it with `laydown edit`") + 1;
+    let pos = content
+        .rfind(',')
+        .expect("File seems broken, please consider fixing it with 'laydown edit'")
+        + 1;
     content.insert_str(pos, "history: [],\n");
 
-    match ron::from_str(&content) {
+    match ron::from_str(content) {
         Ok(_deserialized_content) => _deserialized_content,
-        Err(e) => panic!("Failed to fix laydown.ron: {}", e)
+        Err(e) => panic!("Failed to fix laydown.ron: {}", e),
     }
-
 }
 
 fn deserialize_ron_file(content: &mut String) -> Standup {
-    let deserialized_content: Standup = match ron::from_str(&content) {
+    let deserialized_content: Standup = match ron::from_str(content) {
         Ok(_deserialized_content) => _deserialized_content,
         Err(error) => match error.code {
             ron::error::ErrorCode::ExpectedStruct => Standup::new(),
             ron::error::ErrorCode::Message(s) => {
                 let str_s = s.as_str();
                 match str_s {
-                    "missing field `history`" => {
-                        fix_missing_history(content)
-                    }
-                    _ => panic!("Failed to deserialize content from laydown.ron: {}", s)
+                    "missing field `history`" => fix_missing_history(content),
+                    _ => panic!("Failed to deserialize content from laydown.ron: {}", s),
                 }
             }
             other_error => {
@@ -113,6 +113,7 @@ pub fn clear_data_from_file(file: &Path) {
         .expect("Failed to erase existing data from laydown.ron");
 }
 
+#[allow(clippy::needless_return)]
 pub fn archive(file: &Path) {
     let laydown_config_directory = get_laydown_config_directory();
     let archive_directory = laydown_config_directory.join("archive");
