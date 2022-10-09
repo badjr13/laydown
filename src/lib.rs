@@ -39,7 +39,7 @@ pub struct Config {
     blocker: Option<String>,
     sidebar: Option<String>,
     clear: bool,
-    edit: Option<String>,
+    edit: bool,
     undo: bool,
     archive: bool,
     config_dir: bool,
@@ -49,18 +49,85 @@ pub fn get_args() -> LaydownResult<Config> {
     let matches = Command::new("laydown")
         .version("2.0.0")
         .author("Bobby Dorrance")
-        .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.");
+        .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
+        .arg(
+            Arg::new("did")
+                .help("Add item(s) to DID section of your Standup")
+                .short('x')
+                .long("did")
+                .value_name("ITEM")
+                .display_order(1)
+        )
+        .arg(
+            Arg::new("doing")
+                .help("Add item(s) to DOING section of your Standup")
+                .short('d')
+                .long("doing")
+                .value_name("ITEM")
+                .display_order(2)
+        )
+        .arg(
+            Arg::new("blocked")
+                .help("Add item(s) to BLOCKED section of your Standup")
+                .short('b')
+                .long("blocked")
+                .value_name("ITEM")
+                .display_order(3)
+        )
+        .arg(
+            Arg::new("sidebar")
+                .help("Add item(s) to SIDEBAR section of your Standup")
+                .short('s')
+                .long("sidebar")
+                .value_name("ITEM")
+                .display_order(4)
+        )
+        .arg(
+            Arg::new("clear")
+                .help("Remove all items from your Standup")
+                .long("clear")
+                .action(clap::ArgAction::SetTrue)
+                .display_order(5)
+        )
+        .arg(
+            Arg::new("edit")
+                .help("Directly access/edit data in your Standup")
+                .long("edit")
+                .action(clap::ArgAction::SetTrue)
+                .display_order(6)
+        )
+        .arg(
+            Arg::new("undo")
+                .help("Remove last item added to your standup")
+                .long("undo")
+                .action(clap::ArgAction::SetTrue)
+                .display_order(7)
+        )
+        .arg(
+            Arg::new("archive")
+                .help("Archive today's Standup.")
+                .long("archive")
+                .action(clap::ArgAction::SetTrue)
+                .display_order(8)
+        )
+        .arg(
+            Arg::new("data_dir")
+                .help("Print location of the laydown data directory")
+                .long("dat_dir")
+                .action(clap::ArgAction::SetTrue)
+                .display_order(9)
+        )
+        .get_matches();
 
-        let did = Some("did test".to_string());
-        let doing = Some("do test".to_string());
-        let blocker = Some("blocker test".to_string());
-        let sidebar = Some("sidebar test".to_string());
-        let clear = false;
-        let edit = Some("edit test".to_string());
-        let undo = false;
-        let archive = false;
-        let config_dir = false;
-
+    let did = Some("did test".to_string());
+    let doing = Some("do test".to_string());
+    let blocker = Some("blocker test".to_string());
+    let sidebar = Some("sidebar test".to_string());
+    let clear = false;
+    let edit = false;
+    let undo = false;
+    let archive = false;
+    let config_dir = false;
 
     Ok(Config {
         did,
@@ -80,7 +147,6 @@ pub fn run(config: Config) -> LaydownResult<()> {
     Ok(())
 }
 
-
 pub fn parse_arguments(arguments: Vec<String>, env: Env) {
     let file = data_file::get_path_to_file(env);
 
@@ -98,7 +164,6 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
             UNDO => data_file::get_standup(&file).undo(&file),
             ARCHIVE => data_file::archive(&file),
             CONFIG_DIR => println!("{}", data_file::get_laydown_config_directory().display()),
-            HELP | DASH_HELP => print_help_information(),
             _ => print_invalid_command(),
         },
         3.. => {
@@ -114,26 +179,6 @@ pub fn parse_arguments(arguments: Vec<String>, env: Env) {
         }
         _ => print_invalid_command(),
     }
-}
-
-fn print_help_information() {
-    println!("\nRunning \"laydown\" without passing any arguments will display your Standup\n");
-    println!("Usage: laydown <command> \"<item>\" \"<item>\"\n");
-    println!("Available commands:");
-    println!("di, did      <item>  Add item to DID section of your Standup");
-    println!("do, doing    <item>  Add item to DOING section of your Standup");
-    println!("bl, blocker  <item>  Add item to BLOCKERS section of your Standup");
-    println!("sb, sidebar  <item>  Add item to SIDEBARS section of your Standup\n");
-    println!("                     TIP: Multiple space separated items can be added.\n");
-    println!("clear                Remove all items from your Standup");
-    println!("edit <editor>        Directly access data displayed in your Standup.");
-    println!("                     This can be used to edit or delete existing entries.");
-    println!("                     Will use VI by default if no editor is provided.");
-    println!("undo                 Remove last item added to your Standup.\n");
-    println!("archive              Archive today's Standup. Found in laydown config directory.");
-    println!("                     Note: Archiving will automatically clear out existing Standup.");
-    println!("config-dir           Print location of laydown config directory.\n");
-    println!("help, --help         Display this message\n");
 }
 
 fn print_invalid_command() {
