@@ -1,11 +1,7 @@
 #![warn(clippy::pedantic)]
-use std::env;
-
-use laydown::parse_arguments;
-use laydown::Env;
-
 fn main() {
-    let arguments: Vec<String> = env::args().collect();
-
-    parse_arguments(arguments, Env::Prod);
+    if let Err(e) = laydown::get_args().and_then(laydown::run) {
+        eprintln!("{}", e);
+        std::process::exit(1);
+    }
 }

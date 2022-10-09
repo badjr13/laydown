@@ -12,6 +12,7 @@ categories = ["command-line-utilities"]
 
 [dependencies]
 chrono = "0.4"
-dirs = "4.0.0"
+clap = "4"
+dirs = "4"
 ron = "0.7.0"
 serde = { version = "1", features = ["derive"] }

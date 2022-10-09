@@ -1,3 +1,4 @@
+use clap::{Arg, Command};
 use std::env;
 
 pub mod data_file;
@@ -28,6 +29,57 @@ pub enum Env {
     Prod,
     Test,
 }
+
+type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
+
+#[derive(Debug)]
+pub struct Config {
+    did: Option<String>,
+    doing: Option<String>,
+    blocker: Option<String>,
+    sidebar: Option<String>,
+    clear: bool,
+    edit: Option<String>,
+    undo: bool,
+    archive: bool,
+    config_dir: bool,
+}
+
+pub fn get_args() -> LaydownResult<Config> {
+    let matches = Command::new("laydown")
+        .version("2.0.0")
+        .author("Bobby Dorrance")
+        .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.");
+
+        let did = Some("did test".to_string());
+        let doing = Some("do test".to_string());
+        let blocker = Some("blocker test".to_string());
+        let sidebar = Some("sidebar test".to_string());
+        let clear = false;
+        let edit = Some("edit test".to_string());
+        let undo = false;
+        let archive = false;
+        let config_dir = false;
+
+
+    Ok(Config {
+        did,
+        doing,
+        blocker,
+        sidebar,
+        clear,
+        edit,
+        undo,
+        archive,
+        config_dir,
+    })
+}
+
+pub fn run(config: Config) -> LaydownResult<()> {
+    println!("{:?}", config);
+    Ok(())
+}
+
 
 pub fn parse_arguments(arguments: Vec<String>, env: Env) {
     let file = data_file::get_path_to_file(env);
