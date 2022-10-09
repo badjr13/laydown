@@ -42,7 +42,7 @@ pub struct Config {
     edit: bool,
     undo: bool,
     archive: bool,
-    config_dir: bool,
+    data_dir: bool,
 }
 
 pub fn get_args() -> LaydownResult<Config> {
@@ -123,8 +123,6 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .get_matches();
 
-    // let out_file = matches.get_one::<String>("out_file").map(String::from);
-    // let count: bool = matches.get_flag("count");
     let did: Vec<String> = matches
         .get_many::<String>("did")
         .unwrap_or_default()
@@ -149,11 +147,11 @@ pub fn get_args() -> LaydownResult<Config> {
         .map(|x| x.to_string())
         .collect();
 
-    let clear = false;
-    let edit = false;
-    let undo = false;
-    let archive = false;
-    let config_dir = false;
+    let clear: bool = matches.get_flag("clear");
+    let edit: bool = matches.get_flag("edit");
+    let undo: bool = matches.get_flag("undo");
+    let archive: bool = matches.get_flag("archive");
+    let data_dir: bool = matches.get_flag("data_dir");
 
     Ok(Config {
         did: Some(did),
@@ -164,7 +162,7 @@ pub fn get_args() -> LaydownResult<Config> {
         edit,
         undo,
         archive,
-        config_dir,
+        data_dir,
     })
 }
 
