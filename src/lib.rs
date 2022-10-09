@@ -34,10 +34,10 @@ type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug)]
 pub struct Config {
-    did: Option<String>,
-    doing: Option<String>,
-    blocker: Option<String>,
-    sidebar: Option<String>,
+    did: Option<Vec<String>>,
+    doing: Option<Vec<String>>,
+    blocked: Option<Vec<String>>,
+    sidebar: Option<Vec<String>>,
     clear: bool,
     edit: bool,
     undo: bool,
@@ -56,6 +56,7 @@ pub fn get_args() -> LaydownResult<Config> {
                 .short('x')
                 .long("did")
                 .value_name("ITEM")
+                .num_args(1..)
                 .display_order(1)
         )
         .arg(
@@ -64,6 +65,7 @@ pub fn get_args() -> LaydownResult<Config> {
                 .short('d')
                 .long("doing")
                 .value_name("ITEM")
+                .num_args(1..)
                 .display_order(2)
         )
         .arg(
@@ -72,6 +74,7 @@ pub fn get_args() -> LaydownResult<Config> {
                 .short('b')
                 .long("blocked")
                 .value_name("ITEM")
+                .num_args(1..)
                 .display_order(3)
         )
         .arg(
@@ -80,6 +83,7 @@ pub fn get_args() -> LaydownResult<Config> {
                 .short('s')
                 .long("sidebar")
                 .value_name("ITEM")
+                .num_args(1..)
                 .display_order(4)
         )
         .arg(
@@ -119,10 +123,32 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .get_matches();
 
-    let did = Some("did test".to_string());
-    let doing = Some("do test".to_string());
-    let blocker = Some("blocker test".to_string());
-    let sidebar = Some("sidebar test".to_string());
+    // let out_file = matches.get_one::<String>("out_file").map(String::from);
+    // let count: bool = matches.get_flag("count");
+    let did: Vec<String> = matches
+        .get_many::<String>("did")
+        .unwrap_or_default()
+        .map(|x| x.to_string())
+        .collect();
+
+    let doing: Vec<String> = matches
+        .get_many::<String>("doing")
+        .unwrap_or_default()
+        .map(|x| x.to_string())
+        .collect();
+
+    let blocked: Vec<String> = matches
+        .get_many::<String>("blocked")
+        .unwrap_or_default()
+        .map(|x| x.to_string())
+        .collect();
+
+    let sidebar: Vec<String> = matches
+        .get_many::<String>("sidebar")
+        .unwrap_or_default()
+        .map(|x| x.to_string())
+        .collect();
+
     let clear = false;
     let edit = false;
     let undo = false;
@@ -130,10 +156,10 @@ pub fn get_args() -> LaydownResult<Config> {
     let config_dir = false;
 
     Ok(Config {
-        did,
-        doing,
-        blocker,
-        sidebar,
+        did: Some(did),
+        doing: Some(doing),
+        blocked: Some(blocked),
+        sidebar: Some(sidebar),
         clear,
         edit,
         undo,
