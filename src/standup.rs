@@ -3,7 +3,7 @@ use std::fmt;
 use std::path::Path;
 
 use crate::data_file;
-use crate::{BL, BLOCKER, DI, DID, DO, DOING, SB, SIDEBAR};
+use crate::{BLOCKER, DID, DOING, SIDEBAR};
 
 #[derive(Deserialize, Serialize)]
 pub struct Standup {
@@ -27,25 +27,25 @@ impl Standup {
 
     pub fn add_item(mut self, file: &Path, command: &str, items: Vec<String>) {
         match command {
-            DID | DI => {
+            DID => {
                 for item in items {
                     self.did.push(item);
                     self.history.push(DID.to_string());
                 }
             }
-            DOING | DO => {
+            DOING => {
                 for item in items {
                     self.doing.push(item);
                     self.history.push(DOING.to_string());
                 }
             }
-            BLOCKER | BL => {
+            BLOCKER => {
                 for item in items {
                     self.blockers.push(item);
                     self.history.push(BLOCKER.to_string());
                 }
             }
-            SIDEBAR | SB => {
+            SIDEBAR => {
                 for item in items {
                     self.sidebars.push(item);
                     self.history.push(SIDEBAR.to_string());
@@ -60,10 +60,10 @@ impl Standup {
 
     pub fn undo(mut self, file: &Path) {
         match self.history.pop().expect("No history available").as_str() {
-            DID | DI => self.did.pop(),
-            DOING | DO => self.doing.pop(),
-            BLOCKER | BL => self.blockers.pop(),
-            SIDEBAR | SB => self.sidebars.pop(),
+            DID => self.did.pop(),
+            DOING => self.doing.pop(),
+            BLOCKER => self.blockers.pop(),
+            SIDEBAR => self.sidebars.pop(),
             _ => Some("Invalid History".to_string()),
         };
 

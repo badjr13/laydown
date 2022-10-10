@@ -4,26 +4,10 @@ use std::env;
 pub mod data_file;
 mod standup;
 
-const CLEAR: &str = "clear";
-const EDIT: &str = "edit";
-const UNDO: &str = "undo";
-const ARCHIVE: &str = "archive";
-const CONFIG_DIR: &str = "config-dir";
-
-const HELP: &str = "help";
-const DASH_HELP: &str = "--help";
-
 const DID: &str = "did";
-const DI: &str = "di";
-
 const DOING: &str = "doing";
-const DO: &str = "do";
-
 const BLOCKER: &str = "blocker";
-const BL: &str = "bl";
-
 const SIDEBAR: &str = "sidebar";
-const SB: &str = "sb";
 
 pub enum Env {
     Prod,
@@ -156,8 +140,16 @@ pub fn get_args() -> LaydownResult<Config> {
     Ok(Config {
         did: if did.is_empty() { None } else { Some(did) },
         doing: if doing.is_empty() { None } else { Some(doing) },
-        blocked: if blocked.is_empty() { None } else { Some(blocked) },
-        sidebar: if sidebar.is_empty() { None } else { Some(sidebar) },
+        blocked: if blocked.is_empty() {
+            None
+        } else {
+            Some(blocked)
+        },
+        sidebar: if sidebar.is_empty() {
+            None
+        } else {
+            Some(sidebar)
+        },
         clear,
         edit,
         undo,
@@ -199,8 +191,4 @@ pub fn run(config: Config) -> LaydownResult<()> {
     }
 
     Ok(())
-}
-
-fn print_invalid_command() {
-    println!("The command you entered is not valid. Try \"laydown help\" for a list of commands.")
 }
