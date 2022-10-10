@@ -117,7 +117,7 @@ pub fn get_args() -> LaydownResult<Config> {
         .arg(
             Arg::new("data_dir")
                 .help("Print location of the laydown data directory")
-                .long("dat_dir")
+                .long("data-dir")
                 .action(clap::ArgAction::SetTrue)
                 .display_order(9)
         )
@@ -154,10 +154,10 @@ pub fn get_args() -> LaydownResult<Config> {
     let data_dir: bool = matches.get_flag("data_dir");
 
     Ok(Config {
-        did: Some(did),
-        doing: Some(doing),
-        blocked: Some(blocked),
-        sidebar: Some(sidebar),
+        did: if did.is_empty() { None } else { Some(did) },
+        doing: if doing.is_empty() { None } else { Some(doing) },
+        blocked: if blocked.is_empty() { None } else { Some(blocked) },
+        sidebar: if sidebar.is_empty() { None } else { Some(sidebar) },
         clear,
         edit,
         undo,
@@ -167,42 +167,38 @@ pub fn get_args() -> LaydownResult<Config> {
 }
 
 pub fn run(config: Config) -> LaydownResult<()> {
-    println!("{:?}", config);
-    Ok(())
-}
+    let file = data_file::get_path_to_file(Env::Prod);
 
-pub fn parse_arguments(arguments: Vec<String>, env: Env) {
-    let file = data_file::get_path_to_file(env);
-
-    match arguments.len() {
-        // This should never happen. The name of the binary
-        // is always the first element of env::args
-        0 => panic!("Something went horribly wrong."),
-        1 => print!("{}", data_file::get_standup(&file)),
-        2 => match arguments[1].as_str() {
-            CLEAR => data_file::clear_data_from_file(&file),
-            EDIT => {
-                let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
-                data_file::manually_edit_file(&file, default_editor)
-            }
-            UNDO => data_file::get_standup(&file).undo(&file),
-            ARCHIVE => data_file::archive(&file),
-            CONFIG_DIR => println!("{}", data_file::get_laydown_config_directory().display()),
-            _ => print_invalid_command(),
-        },
-        3.. => {
-            let command = arguments[1].as_str();
-            let (_, user_input) = arguments.split_at(2);
-            match command {
-                DID | DI | DOING | DO | BLOCKER | BL | SIDEBAR | SB => {
-                    data_file::get_standup(&file).add_item(&file, command, user_input.to_vec())
-                }
-                EDIT => data_file::manually_edit_file(&file, arguments[2].to_string()),
-                _ => print_invalid_command(),
-            }
-        }
-        _ => print_invalid_command(),
+    if let Some(items) = config.did {
+        data_file::get_standup(&file).add_item(&file, DID, items);
     }
+    if let Some(items) = config.doing {
+        data_file::get_standup(&file).add_item(&file, DOING, items);
+    }
+    if let Some(items) = config.blocked {
+        data_file::get_standup(&file).add_item(&file, BLOCKER, items);
+    }
+    if let Some(items) = config.sidebar {
+        data_file::get_standup(&file).add_item(&file, SIDEBAR, items);
+    }
+    if config.clear {
+        data_file::clear_data_from_file(&file)
+    }
+    if config.edit {
+        let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
+        data_file::manually_edit_file(&file, default_editor);
+    }
+    if config.undo {
+        data_file::get_standup(&file).undo(&file);
+    }
+    if config.archive {
+        data_file::archive(&file);
+    }
+    if config.data_dir {
+        println!("{}", data_file::get_laydown_config_directory().display());
+    }
+
+    Ok(())
 }
 
 fn print_invalid_command() {
