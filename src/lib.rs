@@ -187,7 +187,7 @@ pub fn run(config: Config) -> LaydownResult<()> {
         data_file::archive(&file);
     }
     if config.data_dir {
-        println!("{}", data_file::get_laydown_config_directory().display());
+        println!("{}", data_file::get_laydown_data_directory().display());
     } else {
         let standup = data_file::get_standup(&file);
         println!("{}", standup);

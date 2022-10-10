@@ -11,19 +11,19 @@ use crate::standup::Standup;
 
 use crate::Env;
 
-pub fn get_laydown_config_directory() -> PathBuf {
-    dirs::config_dir()
-        .expect("Failed to find laydown config directory")
+pub fn get_laydown_data_directory() -> PathBuf {
+    dirs::data_dir()
+        .expect("Failed to find laydown data directory")
         .join("laydown")
 }
 
 pub fn get_path_to_file(env: Env) -> PathBuf {
-    let laydown_config_directory = get_laydown_config_directory();
-    fs::create_dir(&laydown_config_directory).ok();
+    let laydown_data_directory = get_laydown_data_directory();
+    fs::create_dir(&laydown_data_directory).ok();
 
     let ron_data_file: PathBuf = match env {
-        Env::Prod => laydown_config_directory.join("laydown.ron"),
-        Env::Test => laydown_config_directory.join("test_laydown.ron"),
+        Env::Prod => laydown_data_directory.join("laydown.ron"),
+        Env::Test => laydown_data_directory.join("test_laydown.ron"),
     };
 
     OpenOptions::new()
@@ -114,8 +114,8 @@ pub fn clear_data_from_file(file: &Path) {
 }
 
 pub fn archive(file: &Path) {
-    let laydown_config_directory = get_laydown_config_directory();
-    let archive_directory = laydown_config_directory.join("archive");
+    let laydown_data_directory = get_laydown_data_directory();
+    let archive_directory = laydown_data_directory.join("archive");
     fs::create_dir(&archive_directory).ok();
 
     let date = Local::now().format("%Y-%m-%d").to_string();
