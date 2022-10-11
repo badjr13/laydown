@@ -9,22 +9,17 @@ use chrono::Local;
 
 use crate::standup::Standup;
 
-use crate::Env;
-
 pub fn get_laydown_data_directory() -> PathBuf {
     dirs::data_dir()
         .expect("Failed to find laydown data directory")
         .join("laydown")
 }
 
-pub fn get_path_to_file(env: Env) -> PathBuf {
+pub fn get_path_to_file() -> PathBuf {
     let laydown_data_directory = get_laydown_data_directory();
     fs::create_dir(&laydown_data_directory).ok();
 
-    let ron_data_file: PathBuf = match env {
-        Env::Prod => laydown_data_directory.join("laydown.ron"),
-        Env::Test => laydown_data_directory.join("test_laydown.ron"),
-    };
+    let ron_data_file = laydown_data_directory.join("laydown.ron");
 
     OpenOptions::new()
         .create(true)

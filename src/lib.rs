@@ -9,11 +9,6 @@ const DOING: &str = "doing";
 const BLOCKER: &str = "blocker";
 const SIDEBAR: &str = "sidebar";
 
-pub enum Env {
-    Prod,
-    Test,
-}
-
 type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug)]
@@ -159,7 +154,7 @@ pub fn get_args() -> LaydownResult<Config> {
 }
 
 pub fn run(config: Config) -> LaydownResult<()> {
-    let file = data_file::get_path_to_file(Env::Prod);
+    let file = data_file::get_path_to_file();
 
     if let Some(items) = config.did {
         data_file::get_standup(&file).add_item(&file, DID, items);
