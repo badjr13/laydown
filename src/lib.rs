@@ -15,7 +15,7 @@ type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
 pub struct Config {
     did: Option<Vec<String>>,
     doing: Option<Vec<String>>,
-    blocked: Option<Vec<String>>,
+    blocker: Option<Vec<String>>,
     sidebar: Option<Vec<String>>,
     clear: bool,
     edit: bool,
@@ -48,10 +48,10 @@ pub fn get_args() -> LaydownResult<Config> {
                 .display_order(2)
         )
         .arg(
-            Arg::new("blocked")
-                .help("Add item(s) to BLOCKED section of your Standup")
+            Arg::new("blocker")
+                .help("Add item(s) to blocker section of your Standup")
                 .short('b')
-                .long("blocked")
+                .long("blocker")
                 .value_name("ITEM")
                 .num_args(1..)
                 .display_order(3)
@@ -114,8 +114,8 @@ pub fn get_args() -> LaydownResult<Config> {
         .map(|x| x.to_string())
         .collect();
 
-    let blocked: Vec<String> = matches
-        .get_many::<String>("blocked")
+    let blocker: Vec<String> = matches
+        .get_many::<String>("blocker")
         .unwrap_or_default()
         .map(|x| x.to_string())
         .collect();
@@ -135,10 +135,10 @@ pub fn get_args() -> LaydownResult<Config> {
     Ok(Config {
         did: if did.is_empty() { None } else { Some(did) },
         doing: if doing.is_empty() { None } else { Some(doing) },
-        blocked: if blocked.is_empty() {
+        blocker: if blocker.is_empty() {
             None
         } else {
-            Some(blocked)
+            Some(blocker)
         },
         sidebar: if sidebar.is_empty() {
             None
@@ -162,7 +162,7 @@ pub fn run(config: Config) -> LaydownResult<()> {
     if let Some(items) = config.doing {
         data_file::get_standup(&file).add_item(&file, DOING, items);
     }
-    if let Some(items) = config.blocked {
+    if let Some(items) = config.blocker {
         data_file::get_standup(&file).add_item(&file, BLOCKER, items);
     }
     if let Some(items) = config.sidebar {
@@ -183,9 +183,6 @@ pub fn run(config: Config) -> LaydownResult<()> {
     }
     if config.data_dir {
         println!("{}", data_file::get_laydown_data_directory().display());
-    } else {
-        let standup = data_file::get_standup(&file);
-        println!("{}", standup);
     }
 
     Ok(())
