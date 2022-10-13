@@ -29,6 +29,7 @@ pub fn get_args() -> LaydownResult<Config> {
         .version("2.0.0")
         .author("Bobby Dorrance")
         .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
+        .arg_required_else_help(true)
         .arg(
             Arg::new("did")
                 .help("Add item(s) to DID section of your Standup")
