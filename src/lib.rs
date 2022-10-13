@@ -29,7 +29,6 @@ pub fn get_args() -> LaydownResult<Config> {
         .version("2.0.0")
         .author("Bobby Dorrance")
         .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
-        .arg_required_else_help(true)
         .arg(
             Arg::new("did")
                 .help("Add item(s) to DID section of your Standup")
@@ -157,33 +156,49 @@ pub fn get_args() -> LaydownResult<Config> {
 pub fn run(config: Config) -> LaydownResult<()> {
     let file = data_file::get_path_to_file();
 
+    let mut display_laydown = true;
+
     if let Some(items) = config.did {
         data_file::get_standup(&file).add_item(&file, DID, items);
+        display_laydown = false;
     }
     if let Some(items) = config.doing {
         data_file::get_standup(&file).add_item(&file, DOING, items);
+        display_laydown = false;
     }
     if let Some(items) = config.blocker {
         data_file::get_standup(&file).add_item(&file, BLOCKER, items);
+        display_laydown = false;
     }
     if let Some(items) = config.sidebar {
         data_file::get_standup(&file).add_item(&file, SIDEBAR, items);
+        display_laydown = false;
     }
     if config.clear {
-        data_file::clear_data_from_file(&file)
+        data_file::clear_data_from_file(&file);
+        display_laydown = false;
     }
     if config.edit {
         let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
         data_file::manually_edit_file(&file, default_editor);
+        display_laydown = false;
     }
     if config.undo {
         data_file::get_standup(&file).undo(&file);
+        display_laydown = false;
     }
     if config.archive {
         data_file::archive(&file);
+        display_laydown = false;
     }
     if config.data_dir {
         println!("{}", data_file::get_laydown_data_directory().display());
+        display_laydown = false;
+    }
+
+    if display_laydown {
+        let test = data_file::get_standup(&file);
+        print!("{}", test);
     }
 
     Ok(())
