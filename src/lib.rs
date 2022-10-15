@@ -108,11 +108,15 @@ pub fn get_args() -> LaydownResult<Config> {
         .map(|x| x.to_string())
         .collect();
 
+    let did = if did.is_empty() { None } else { Some(did) };
+
     let doing: Vec<String> = matches
         .get_many::<String>("doing")
         .unwrap_or_default()
         .map(|x| x.to_string())
         .collect();
+
+    let doing = if doing.is_empty() { None } else { Some(doing) };
 
     let blocker: Vec<String> = matches
         .get_many::<String>("blocker")
@@ -120,11 +124,23 @@ pub fn get_args() -> LaydownResult<Config> {
         .map(|x| x.to_string())
         .collect();
 
+    let blocker = if blocker.is_empty() {
+        None
+    } else {
+        Some(blocker)
+    };
+
     let sidebar: Vec<String> = matches
         .get_many::<String>("sidebar")
         .unwrap_or_default()
         .map(|x| x.to_string())
         .collect();
+
+    let sidebar = if sidebar.is_empty() {
+        None
+    } else {
+        Some(sidebar)
+    };
 
     let clear: bool = matches.get_flag("clear");
     let edit: bool = matches.get_flag("edit");
@@ -133,18 +149,10 @@ pub fn get_args() -> LaydownResult<Config> {
     let data_dir: bool = matches.get_flag("data_dir");
 
     Ok(Config {
-        did: if did.is_empty() { None } else { Some(did) },
-        doing: if doing.is_empty() { None } else { Some(doing) },
-        blocker: if blocker.is_empty() {
-            None
-        } else {
-            Some(blocker)
-        },
-        sidebar: if sidebar.is_empty() {
-            None
-        } else {
-            Some(sidebar)
-        },
+        did,
+        doing,
+        blocker,
+        sidebar,
         clear,
         edit,
         undo,
@@ -156,47 +164,47 @@ pub fn get_args() -> LaydownResult<Config> {
 pub fn run(config: Config) -> LaydownResult<()> {
     let file = data_file::get_path_to_file();
 
-    let mut display_laydown = true;
+    let mut show_standup_if_no_args_present = true;
 
     if let Some(items) = config.did {
         data_file::get_standup(&file).add_item(&file, DID, items);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if let Some(items) = config.doing {
         data_file::get_standup(&file).add_item(&file, DOING, items);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if let Some(items) = config.blocker {
         data_file::get_standup(&file).add_item(&file, BLOCKER, items);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if let Some(items) = config.sidebar {
         data_file::get_standup(&file).add_item(&file, SIDEBAR, items);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if config.clear {
         data_file::clear_data_from_file(&file);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if config.edit {
         let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
         data_file::manually_edit_file(&file, default_editor);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if config.undo {
         data_file::get_standup(&file).undo(&file);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if config.archive {
         data_file::archive(&file);
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
     if config.data_dir {
         println!("{}", data_file::get_laydown_data_directory().display());
-        display_laydown = false;
+        show_standup_if_no_args_present = false;
     }
 
-    if display_laydown {
+    if show_standup_if_no_args_present {
         let test = data_file::get_standup(&file);
         print!("{}", test);
     }
