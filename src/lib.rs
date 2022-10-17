@@ -49,7 +49,7 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .arg(
             Arg::new("blocker")
-                .help("Add item(s) to blocker section of your Standup")
+                .help("Add item(s) to BLOCKER section of your Standup")
                 .short('b')
                 .long("blocker")
                 .value_name("ITEM")
@@ -81,14 +81,14 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .arg(
             Arg::new("undo")
-                .help("Remove last item added to your standup")
+                .help("Remove last item added to your Standup")
                 .long("undo")
                 .action(clap::ArgAction::SetTrue)
                 .display_order(7)
         )
         .arg(
             Arg::new("archive")
-                .help("Archive today's Standup.")
+                .help("Archive today's Standup")
                 .long("archive")
                 .action(clap::ArgAction::SetTrue)
                 .display_order(8)

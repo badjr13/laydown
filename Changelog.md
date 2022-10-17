@@ -1,68 +1,97 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-**empty**
+
+### Fixed
+
+- Typos in help message
 
 ## [2.0.0] - 2022-10-14
+
 ### Changed
+
 - Updated CLI application from Rust standard library to Clap.rs
 
 ### Removed
+
 - Tests. I know this is bad. I want to rewrite them.
 
 ## [1.6.0] - 2022-08-16
+
 ### Added
+
 - Only deserialize ron data file when needed
 
 ### Fixed
+
 - Fix archiving bug
 
 ## [1.5.1] - 2022-08-13
+
 ### Added
+
 - Fix missing history bug
 - Prompt user if they're attempting to overwrite an existing archive file
 
 ## [1.5.0] - 2022-07-22
+
 ### Added
+
 - Automatically clear out existing Standup after `archive` command is run
 
 ## [1.4.1] - 2022-07-18
+
 ### Fixed
--  Fix bug where data file is empty upon initialization
+
+- Fix bug where data file is empty upon initialization
 
 ## [1.4.0] - 2022-05-27
+
 ### Added
+
 - Add ability to print out location of config directory
 - Create view for empty sections
 - Add ability to create multiple items at once
 
 ## [1.3.0] - 2022-05-18
+
 ### Added
+
 - Add ability to Archive Daily Standup
 - Implement Display on Standup struct
 
 ## [1.2.0] - 2022-05-04
+
 ### Added
+
 - Add ability to `undo`
 
 ### Fixed
+
 - App would crash if `EDITOR` environment variable is not set
 
 ## [1.1.0] - 2022-04-26
+
 ### Added
+
 - Add `--help` command
 - Add support for `EDITOR` environment variable for use with `edit` command
 
 ## [1.0.0] - 2022-04-13
+
 ### Added
+
 - Did, Doing, Blockers, Sidebars, Clear, Edit, Help
 
-[Unreleased]: https://github.com/badjr13/laydown
+[unreleased]: https://github.com/badjr13/laydown
+
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
+
 [2.0.0]: https://github.com/badjr13/laydown/tree/1d3239c132c39ec3f2a44dfd837f53f6d7e54e87
 [1.6.0]: https://github.com/badjr13/laydown/tree/00fcf6c1385152e5aa2d3a359482e86af194494a
 [1.5.1]: https://github.com/badjr13/laydown/tree/f246b3a9e1d85376967a23b4a7e2c93e1cac81e0
