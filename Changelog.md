@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**empty**
+
+## [2.0.1] - 2022-10-18
+
 ### Fixed
 
 - Typos in help message
@@ -92,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
 
+[2.0.1]: https://github.com/badjr13/laydown/tree/dcbde0fa55d97e4e8d2a6d2344ea8201b38de267
 [2.0.0]: https://github.com/badjr13/laydown/tree/1d3239c132c39ec3f2a44dfd837f53f6d7e54e87
 [1.6.0]: https://github.com/badjr13/laydown/tree/00fcf6c1385152e5aa2d3a359482e86af194494a
 [1.5.1]: https://github.com/badjr13/laydown/tree/f246b3a9e1d85376967a23b4a7e2c93e1cac81e0

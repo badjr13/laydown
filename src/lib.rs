@@ -26,7 +26,7 @@ pub struct Config {
 
 pub fn get_args() -> LaydownResult<Config> {
     let matches = Command::new("laydown")
-        .version("2.0.0")
+        .version("2.0.1")
         .author("Bobby Dorrance")
         .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
         .arg(
