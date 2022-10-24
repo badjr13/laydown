@@ -13,10 +13,10 @@ type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug)]
 pub struct Config {
-    did: Option<Vec<String>>,
-    doing: Option<Vec<String>>,
-    blocker: Option<Vec<String>>,
-    sidebar: Option<Vec<String>>,
+    // did: Option<Vec<String>>,
+    // doing: Option<Vec<String>>,
+    // blocker: Option<Vec<String>>,
+    // sidebar: Option<Vec<String>>,
     clear: bool,
     edit: bool,
     undo: bool,
@@ -29,42 +29,18 @@ pub fn get_args() -> LaydownResult<Config> {
         .version("2.0.1")
         .author("Bobby Dorrance")
         .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
-        .arg(
-            Arg::new("did")
-                .help("Add item(s) to DID section of your Standup")
-                .short('x')
-                .long("did")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(1)
+        .disable_help_subcommand(true)
+        .subcommand(
+            Command::new(DID)
+                .about("Add items to the DID section of your standup")
+                .arg(
+                    Arg::new("items")
+                        .num_args(1..)
+                    )
         )
-        .arg(
-            Arg::new("doing")
-                .help("Add item(s) to DOING section of your Standup")
-                .short('d')
-                .long("doing")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(2)
-        )
-        .arg(
-            Arg::new("blocker")
-                .help("Add item(s) to BLOCKER section of your Standup")
-                .short('b')
-                .long("blocker")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(3)
-        )
-        .arg(
-            Arg::new("sidebar")
-                .help("Add item(s) to SIDEBAR section of your Standup")
-                .short('s')
-                .long("sidebar")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(4)
-        )
+        .subcommand(Command::new("doing"))
+        .subcommand(Command::new("blocker"))
+        .subcommand(Command::new("sidebar"))
         .arg(
             Arg::new("clear")
                 .help("Remove all items from your Standup")
@@ -102,45 +78,26 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .get_matches();
 
-    let did: Vec<String> = matches
-        .get_many::<String>("did")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
+    // match matches.subcommand() {
+    //     Some((DID, x)) => {
+    //         let wow: Vec<String> = x.get_many::<String>("items")
+    //             .unwrap_or_default()
+    //             .map(|x| x.to_string())
+    //             .collect();
+    //         println!("{:?}", wow);
+    //     }
+    //     _ => panic!()
+    // }
 
-    let did = if did.is_empty() { None } else { Some(did) };
+    let subcommand_matches = matches.subcommand();
 
-    let doing: Vec<String> = matches
-        .get_many::<String>("doing")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
+    // let did = if let(x) 
 
-    let doing = if doing.is_empty() { None } else { Some(doing) };
+    // let did: Vec<String> = subcommand_matches.get_many::<String>("items")
+    //     .unwrap_or_default()
+    //     .map(|x| x.to_string())
+    //     .collect();
 
-    let blocker: Vec<String> = matches
-        .get_many::<String>("blocker")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
-
-    let blocker = if blocker.is_empty() {
-        None
-    } else {
-        Some(blocker)
-    };
-
-    let sidebar: Vec<String> = matches
-        .get_many::<String>("sidebar")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
-
-    let sidebar = if sidebar.is_empty() {
-        None
-    } else {
-        Some(sidebar)
-    };
 
     let clear: bool = matches.get_flag("clear");
     let edit: bool = matches.get_flag("edit");
@@ -149,10 +106,10 @@ pub fn get_args() -> LaydownResult<Config> {
     let data_dir: bool = matches.get_flag("data_dir");
 
     Ok(Config {
-        did,
-        doing,
-        blocker,
-        sidebar,
+        // did,
+        // doing,
+        // blocker,
+        // sidebar,
         clear,
         edit,
         undo,
@@ -166,22 +123,22 @@ pub fn run(config: Config) -> LaydownResult<()> {
 
     let mut show_standup_if_no_args_present = true;
 
-    if let Some(items) = config.did {
-        data_file::get_standup(&file).add_item(&file, DID, items);
-        show_standup_if_no_args_present = false;
-    }
-    if let Some(items) = config.doing {
-        data_file::get_standup(&file).add_item(&file, DOING, items);
-        show_standup_if_no_args_present = false;
-    }
-    if let Some(items) = config.blocker {
-        data_file::get_standup(&file).add_item(&file, BLOCKER, items);
-        show_standup_if_no_args_present = false;
-    }
-    if let Some(items) = config.sidebar {
-        data_file::get_standup(&file).add_item(&file, SIDEBAR, items);
-        show_standup_if_no_args_present = false;
-    }
+    // if let Some(items) = config.did {
+    //     data_file::get_standup(&file).add_item(&file, DID, items);
+    //     show_standup_if_no_args_present = false;
+    // }
+    // if let Some(items) = config.doing {
+    //     data_file::get_standup(&file).add_item(&file, DOING, items);
+    //     show_standup_if_no_args_present = false;
+    // }
+    // if let Some(items) = config.blocker {
+    //     data_file::get_standup(&file).add_item(&file, BLOCKER, items);
+    //     show_standup_if_no_args_present = false;
+    // }
+    // if let Some(items) = config.sidebar {
+    //     data_file::get_standup(&file).add_item(&file, SIDEBAR, items);
+    //     show_standup_if_no_args_present = false;
+    // }
     if config.clear {
         data_file::clear_data_from_file(&file);
         show_standup_if_no_args_present = false;
