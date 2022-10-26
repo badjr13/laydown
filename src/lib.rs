@@ -29,41 +29,38 @@ pub fn get_args() -> LaydownResult<Config> {
         .version("2.0.1")
         .author("Bobby Dorrance")
         .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
-        .arg(
-            Arg::new("did")
-                .help("Add item(s) to DID section of your Standup")
-                .short('x')
-                .long("did")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(1)
+        .disable_help_subcommand(true)
+        .subcommand(
+            Command::new(DID)
+                .about("Add items to the DID section of your standup")
+                .arg(
+                    Arg::new("items")
+                        .num_args(1..)
+                    )
         )
-        .arg(
-            Arg::new("doing")
-                .help("Add item(s) to DOING section of your Standup")
-                .short('d')
-                .long("doing")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(2)
+        .subcommand(
+            Command::new(DOING)
+                .about("Add items to the DOING section of your standup")
+                .arg(
+                    Arg::new("items")
+                        .num_args(1..)
+                    )
         )
-        .arg(
-            Arg::new("blocker")
-                .help("Add item(s) to BLOCKER section of your Standup")
-                .short('b')
-                .long("blocker")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(3)
+        .subcommand(
+            Command::new(BLOCKER)
+                .about("Add items to the BLOCKER section of your standup")
+                .arg(
+                    Arg::new("items")
+                        .num_args(1..)
+                    )
         )
-        .arg(
-            Arg::new("sidebar")
-                .help("Add item(s) to SIDEBAR section of your Standup")
-                .short('s')
-                .long("sidebar")
-                .value_name("ITEM")
-                .num_args(1..)
-                .display_order(4)
+        .subcommand(
+            Command::new(SIDEBAR)
+                .about("Add items to the SIDEBAR section of your standup")
+                .arg(
+                    Arg::new("items")
+                        .num_args(1..)
+                    )
         )
         .arg(
             Arg::new("clear")
@@ -102,44 +99,48 @@ pub fn get_args() -> LaydownResult<Config> {
         )
         .get_matches();
 
-    let did: Vec<String> = matches
-        .get_many::<String>("did")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
-
-    let did = if did.is_empty() { None } else { Some(did) };
-
-    let doing: Vec<String> = matches
-        .get_many::<String>("doing")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
-
-    let doing = if doing.is_empty() { None } else { Some(doing) };
-
-    let blocker: Vec<String> = matches
-        .get_many::<String>("blocker")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
-
-    let blocker = if blocker.is_empty() {
-        None
-    } else {
-        Some(blocker)
+    let did = match matches.subcommand() {
+        Some((DID, x)) => {
+            let items: Vec<String> = x.get_many::<String>("items")
+                .unwrap_or_default()
+                .map(|x| x.to_string())
+                .collect();
+            Some(items)
+        }
+        _ => None
     };
 
-    let sidebar: Vec<String> = matches
-        .get_many::<String>("sidebar")
-        .unwrap_or_default()
-        .map(|x| x.to_string())
-        .collect();
+    let doing = match matches.subcommand() {
+        Some((DOING, x)) => {
+            let items: Vec<String> = x.get_many::<String>("items")
+                .unwrap_or_default()
+                .map(|x| x.to_string())
+                .collect();
+            Some(items)
+        }
+        _ => None
+    };
 
-    let sidebar = if sidebar.is_empty() {
-        None
-    } else {
-        Some(sidebar)
+    let blocker = match matches.subcommand() {
+        Some((BLOCKER, x)) => {
+            let items: Vec<String> = x.get_many::<String>("items")
+                .unwrap_or_default()
+                .map(|x| x.to_string())
+                .collect();
+            Some(items)
+        }
+        _ => None
+    };
+
+    let sidebar = match matches.subcommand() {
+        Some((SIDEBAR, x)) => {
+            let items: Vec<String> = x.get_many::<String>("items")
+                .unwrap_or_default()
+                .map(|x| x.to_string())
+                .collect();
+            Some(items)
+        }
+        _ => None
     };
 
     let clear: bool = matches.get_flag("clear");
