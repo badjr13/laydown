@@ -28,8 +28,9 @@ pub fn get_args() -> LaydownResult<Config> {
     let matches = Command::new("laydown")
         .version("2.1.0")
         .author("Bobby Dorrance")
-        .about("laydown is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.")
+        .about("Keep track of your next Daily Stand Up")
         .disable_help_subcommand(true)
+        .override_usage("laydown [COMMAND] \"<item>\" \"<item>\" \"<item>\"")
         .subcommand(
             Command::new(DID)
                 .about("Add items to the DID section of your standup")
