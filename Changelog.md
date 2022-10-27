@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-**empty**
+- Dont write out empty line after Sidebar(last) section of Standup
 
 ## [2.2.0] - 2022-10-26
 

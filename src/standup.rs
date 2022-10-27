@@ -109,9 +109,8 @@ impl fmt::Display for Standup {
             for item in &self.sidebars {
                 writeln!(f, "- {}", item)?;
             }
-            writeln!(f)?;
         } else {
-            writeln!(f, "**empty**\n")?;
+            writeln!(f, "**empty**")?;
         }
 
         Ok(())
