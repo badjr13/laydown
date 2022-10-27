@@ -14,5 +14,9 @@ categories = ["command-line-utilities"]
 chrono = "0.4"
 clap = "4"
 dirs = "4"
-ron = "0.7.0"
+ron = "0.7"
 serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "2"
