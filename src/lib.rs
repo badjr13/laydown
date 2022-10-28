@@ -34,114 +34,106 @@ pub fn get_args() -> LaydownResult<Config> {
         .subcommand(
             Command::new(DID)
                 .about("Add items to the DID section of your standup")
-                .arg(
-                    Arg::new("items")
-                        .num_args(1..)
-                    )
+                .arg(Arg::new("items").num_args(1..)),
         )
         .subcommand(
             Command::new(DOING)
                 .about("Add items to the DOING section of your standup")
-                .arg(
-                    Arg::new("items")
-                        .num_args(1..)
-                    )
+                .arg(Arg::new("items").num_args(1..)),
         )
         .subcommand(
             Command::new(BLOCKER)
                 .about("Add items to the BLOCKER section of your standup")
-                .arg(
-                    Arg::new("items")
-                        .num_args(1..)
-                    )
+                .arg(Arg::new("items").num_args(1..)),
         )
         .subcommand(
             Command::new(SIDEBAR)
                 .about("Add items to the SIDEBAR section of your standup")
-                .arg(
-                    Arg::new("items")
-                        .num_args(1..)
-                    )
+                .arg(Arg::new("items").num_args(1..)),
         )
         .arg(
             Arg::new("clear")
                 .help("Remove all items from your Standup")
                 .long("clear")
                 .action(clap::ArgAction::SetTrue)
-                .display_order(5)
+                .display_order(5),
         )
         .arg(
             Arg::new("edit")
                 .help("Directly access/edit data in your Standup")
                 .long("edit")
                 .action(clap::ArgAction::SetTrue)
-                .display_order(6)
+                .display_order(6),
         )
         .arg(
             Arg::new("undo")
                 .help("Remove last item added to your Standup")
                 .long("undo")
                 .action(clap::ArgAction::SetTrue)
-                .display_order(7)
+                .display_order(7),
         )
         .arg(
             Arg::new("archive")
                 .help("Archive today's Standup")
                 .long("archive")
                 .action(clap::ArgAction::SetTrue)
-                .display_order(8)
+                .display_order(8),
         )
         .arg(
             Arg::new("data_dir")
                 .help("Print location of the laydown data directory")
                 .long("data-dir")
                 .action(clap::ArgAction::SetTrue)
-                .display_order(9)
+                .display_order(9),
         )
         .get_matches();
 
     let did = match matches.subcommand() {
         Some((DID, x)) => {
-            let items: Vec<String> = x.get_many::<String>("items")
+            let items: Vec<String> = x
+                .get_many::<String>("items")
                 .unwrap_or_default()
                 .map(|x| x.to_string())
                 .collect();
             Some(items)
         }
-        _ => None
+        _ => None,
     };
 
     let doing = match matches.subcommand() {
         Some((DOING, x)) => {
-            let items: Vec<String> = x.get_many::<String>("items")
+            let items: Vec<String> = x
+                .get_many::<String>("items")
                 .unwrap_or_default()
                 .map(|x| x.to_string())
                 .collect();
             Some(items)
         }
-        _ => None
+        _ => None,
     };
 
     let blocker = match matches.subcommand() {
         Some((BLOCKER, x)) => {
-            let items: Vec<String> = x.get_many::<String>("items")
+            let items: Vec<String> = x
+                .get_many::<String>("items")
                 .unwrap_or_default()
                 .map(|x| x.to_string())
                 .collect();
             Some(items)
         }
-        _ => None
+        _ => None,
     };
 
     let sidebar = match matches.subcommand() {
         Some((SIDEBAR, x)) => {
-            let items: Vec<String> = x.get_many::<String>("items")
+            let items: Vec<String> = x
+                .get_many::<String>("items")
                 .unwrap_or_default()
                 .map(|x| x.to_string())
                 .collect();
             Some(items)
         }
-        _ => None
+        _ => None,
     };
 
     let clear: bool = matches.get_flag("clear");
