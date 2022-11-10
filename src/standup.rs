@@ -72,6 +72,12 @@ impl Standup {
     }
 }
 
+impl Default for Standup {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl fmt::Display for Standup {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "DID:")?;
@@ -117,10 +123,3 @@ impl fmt::Display for Standup {
     }
 }
 
-// Clippy recommended I do this but I don't understand why yet.
-// See: https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/new_without_default.rs
-impl Default for Standup {
-    fn default() -> Self {
-        Self::new()
-    }
-}
