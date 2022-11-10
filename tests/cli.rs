@@ -203,3 +203,23 @@ fn archive() -> TestResult {
 
     Ok(())
 }
+
+#[test]
+fn test_data_dir() -> TestResult {
+    let mut data_directory = dirs::data_dir()
+        .expect("Failed to find laydown data directory")
+        .join("laydown")
+        .into_os_string()
+        .into_string()
+        .unwrap();
+
+    data_directory.push_str("\n");
+
+    Command::cargo_bin("laydown")?
+        .args(["--data-dir"])
+        .assert()
+        .success()
+        .stdout(data_directory);
+
+    Ok(())
+}
