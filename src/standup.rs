@@ -122,4 +122,3 @@ impl fmt::Display for Standup {
         Ok(())
     }
 }
-
