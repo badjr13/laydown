@@ -6,15 +6,13 @@ use chrono::Local;
 use std::error::Error;
 use std::fs;
 
-use laydown::data_file::get_laydown_data_directory;
+use laydown::data_file;
 
 type TestResult = Result<(), Box<dyn Error>>;
 
 fn cleanup() -> TestResult {
-    let data_file = dirs::data_dir()
-        .expect("Failed to find laydown data directory")
-        .join("laydown")
-        .join("laydown.ron");
+    let data_file = data_file::get_path_to_file();
+
     fs::remove_file(data_file)?;
 
     Ok(())
@@ -190,7 +188,7 @@ fn archive() -> TestResult {
 
     run(&["--archive"])?;
 
-    let laydown_data_directory = get_laydown_data_directory();
+    let laydown_data_directory = data_file::get_laydown_data_directory();
     let archive_directory = laydown_data_directory.join("archive");
     let date = Local::now().format("%Y-%m-%d").to_string();
     let file_name = format!("{}.txt", date);
