@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**empty**
+
+## [2.3.0] - 2022-11-13
+
+## Added
+
+- Added numerous integration tests
+- Added github workflow for automated testing on push to main
+- Implement default for Standup
+
+## Changed
+
 - Dont write out empty line after Sidebar(last) section of Standup
 
 ## [2.2.0] - 2022-10-26
@@ -108,6 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
 
+[2.3.0]: https://github.com/badjr13/laydown/tree/246cb54ff78ca9b185435c464ce6bc59abea4b82
 [2.2.0]: https://github.com/badjr13/laydown/tree/31ca0f2b0c98c506b6bc333b4aaf7478516c2d7a
 [2.1.0]: https://github.com/badjr13/laydown/tree/64661fd0ad56006ffbd1e68f379de9a8827673d4
 [2.0.1]: https://github.com/badjr13/laydown/tree/dcbde0fa55d97e4e8d2a6d2344ea8201b38de267
