@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-**empty**
+## Fixed
+- Repair EDIT functionality which broke during migration to Clap
+
+## Changed
+- Clean up data_file.rs in preparation for unit testing
 
 ## [2.3.0] - 2022-11-13
 
