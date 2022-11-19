@@ -21,6 +21,9 @@ SIDEBARS:
 ```
 
 ### How to Install:
+
+You can install `laydown` using [Rust](https://www.rust-lang.org/tools/install).
+
 ```
 cargo install laydown
 ```
