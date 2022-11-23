@@ -11,7 +11,7 @@ use laydown::data_file;
 type TestResult = Result<(), Box<dyn Error>>;
 
 fn cleanup() -> TestResult {
-    let data_file = data_file::get_path_to_file();
+    let data_file = data_file::get_path_to_laydown_data_file();
 
     fs::remove_file(data_file)?;
 

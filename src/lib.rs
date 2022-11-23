@@ -1,5 +1,4 @@
 use clap::{Arg, Command};
-use std::env;
 
 pub mod data_file;
 mod standup;
@@ -18,7 +17,7 @@ pub struct Config {
     blocker: Option<Vec<String>>,
     sidebar: Option<Vec<String>>,
     clear: bool,
-    edit: bool,
+    edit: Option<String>,
     undo: bool,
     archive: bool,
     data_dir: bool,
@@ -62,7 +61,9 @@ pub fn get_args() -> LaydownResult<Config> {
             Arg::new("edit")
                 .help("Directly access/edit data in your Standup")
                 .long("edit")
-                .action(clap::ArgAction::SetTrue)
+                .value_name("EDITOR")
+                .num_args(0..=1)
+                .default_missing_value("vi")
                 .display_order(6),
         )
         .arg(
@@ -137,7 +138,12 @@ pub fn get_args() -> LaydownResult<Config> {
     };
 
     let clear: bool = matches.get_flag("clear");
-    let edit: bool = matches.get_flag("edit");
+
+    let edit = match matches.get_one::<String>("edit") {
+        Some(editor) => Some(editor.to_owned()),
+        None => None,
+    };
+
     let undo: bool = matches.get_flag("undo");
     let archive: bool = matches.get_flag("archive");
     let data_dir: bool = matches.get_flag("data_dir");
@@ -156,7 +162,7 @@ pub fn get_args() -> LaydownResult<Config> {
 }
 
 pub fn run(config: Config) -> LaydownResult<()> {
-    let file = data_file::get_path_to_file();
+    let file = data_file::get_path_to_laydown_data_file();
 
     let mut show_standup_if_no_args_present = true;
 
@@ -180,9 +186,11 @@ pub fn run(config: Config) -> LaydownResult<()> {
         data_file::clear_data_from_file(&file);
         show_standup_if_no_args_present = false;
     }
-    if config.edit {
-        let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
-        data_file::manually_edit_file(&file, default_editor);
+    if let Some(editor) = config.edit {
+        match std::env::var("EDITOR") {
+            Ok(user_default_editor) => data_file::manually_edit_file(&file, user_default_editor),
+            Err(_) => data_file::manually_edit_file(&file, editor),
+        }
         show_standup_if_no_args_present = false;
     }
     if config.undo {
@@ -197,7 +205,6 @@ pub fn run(config: Config) -> LaydownResult<()> {
         println!("{}", data_file::get_laydown_data_directory().display());
         show_standup_if_no_args_present = false;
     }
-
     if show_standup_if_no_args_present {
         let test = data_file::get_standup(&file);
         print!("{}", test);
