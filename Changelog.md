@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Fixed
-- Repair EDIT functionality which broke during migration to Clap
+**empty**
 
-## Changed
-- Clean up data_file.rs in preparation for unit testing
+## [2.4.1] - 2022-22-13
+
+## Fixed
+
+- Issue with EDIT feature Pull Request
 
 ## [2.4.0] - 2022-22-13
 
@@ -132,6 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
 
+[2.4.1]: https://github.com/badjr13/laydown/tree/65adc66a3233f7db9a8fd8311a534252388cdd35
 [2.4.0]: https://github.com/badjr13/laydown/tree/da09128b8ec09a3c4cc9357cac1d1b780b654073
 [2.3.0]: https://github.com/badjr13/laydown/tree/246cb54ff78ca9b185435c464ce6bc59abea4b82
 [2.2.0]: https://github.com/badjr13/laydown/tree/31ca0f2b0c98c506b6bc333b4aaf7478516c2d7a
