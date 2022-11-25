@@ -155,3 +155,41 @@ fn overwrite_existing_archive(data_file: &Path, full_path: &PathBuf) {
         println!("Type 'y' for yes or 'n' for no.");
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_laydown_data_directory() {
+        let user_data_dir = dirs::data_dir().unwrap().join("laydown");
+        let laydown_data_dir = get_laydown_data_directory();
+        assert_eq!(user_data_dir, laydown_data_dir);
+    }
+
+    #[test]
+    fn test_get_path_to_laydown_data_file() {
+        let user_data_dir = dirs::data_dir().unwrap().join("laydown");
+        let user_data_file = user_data_dir.join("laydown.ron");
+        let laydown_data_file = get_path_to_laydown_data_file();
+        assert_eq!(user_data_file, laydown_data_file);
+    }
+
+    #[test]
+    fn test_deserialize_data_file() {
+        // As a side effect, this test also tests:
+        //     - write_to_file()
+        //     - get_standup()
+        let data_file = get_path_to_laydown_data_file();
+
+        let mut test_standup_contents_to_string =
+            fs::read_to_string("tests/expected/serialized_standup.txt").unwrap();
+
+        let standup = Standup::new();
+        standup.add_item(&data_file, "did", vec![String::from("test did item")]);
+
+        let standup = get_standup(&data_file);
+        let deserialized_data = deserialize_data_file(&mut test_standup_contents_to_string);
+        assert_eq!(standup, deserialized_data);
+    }
+}

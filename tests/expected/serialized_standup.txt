@@ -1,0 +1,13 @@
+// Do not rename or delete arrays. Only update elements.
+(
+    did: [
+        "test did item",
+    ],
+    doing: [],
+    blockers: [],
+    sidebars: [],
+    history: [
+        "did",
+    ],
+)
+

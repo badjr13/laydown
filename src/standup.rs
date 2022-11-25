@@ -5,7 +5,7 @@ use std::path::Path;
 use crate::data_file;
 use crate::{BLOCKER, DID, DOING, SIDEBAR};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct Standup {
     pub did: Vec<String>,
     pub doing: Vec<String>,
