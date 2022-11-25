@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-**empty**
+## Fixed
+
+- Small syntax update based on 'Clippy' recommendation
 
 ## [2.4.1] - 2022-22-13
 

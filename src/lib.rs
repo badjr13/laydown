@@ -139,10 +139,9 @@ pub fn get_args() -> LaydownResult<Config> {
 
     let clear: bool = matches.get_flag("clear");
 
-    let edit = match matches.get_one::<String>("edit") {
-        Some(editor) => Some(editor.to_owned()),
-        None => None,
-    };
+    let edit = matches
+        .get_one::<String>("edit")
+        .map(|editor| editor.to_owned());
 
     let undo: bool = matches.get_flag("undo");
     let archive: bool = matches.get_flag("archive");
