@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+
+- Linting and Formatting to GitHub Actions
+
 ## Fixed
 
 - Small syntax update based on 'Clippy' recommendation
