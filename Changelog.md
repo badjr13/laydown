@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**empty**
+
+## [2.5.0] - 2022-25-13
+
 ## Added
 
 - Unit tests for data_file
