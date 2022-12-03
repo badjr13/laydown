@@ -1,11 +1,15 @@
 on:
+  # push:
+  #   tags:
+  #     - 'v[0-9]+.*'
   push:
-    tags:
-      - 'v[0-9]+.*'
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   create_release:
-    name: Create release
+    name: Create Release
     runs-on: ubuntu-latest
     # Note this. We are going to use that in further jobs.
     outputs:
@@ -23,36 +27,46 @@ jobs:
           prerelease: false
 
   release_assets:
-      name: Release assets
-      needs: create_release # we need to know the upload URL
-      runs-on: ${{ matrix.config.os }} # we run many different builds
-      strategy:
-        # just an example matrix
-        matrix:
-          config:
-            - os: ubuntu-latest
-            - os: macos-latest
-            - os: windows-latest
-      steps:
-        # checkout of cource
-        - name: Checkout code
-          uses: actions/checkout@v1
-        # ... whatever build and packaging steps you need here
-        # and finally do an upload!
-        - name: Upload release assets
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ needs.create_release.outputs.upload_url }}
-            # This is how it will be named on the release page. Put hatever name
-            # you like, remember that they need to be different for each platform.
-            # You can choose any build matrix parameters. For Rust I use the
-            # target triple.
-            asset_name: program-name-${{ matrix.config.os }}
-            # The path to the file you want to upload.
-            asset_path: ./path/to/your/file
-            # probably you will need to change it, but most likely you are
-            # uploading a binary file
-            asset_content_type: application/octet-stream
+    name: Release Assets
+    needs: create_release # we need to know the upload URL
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-pc-windows-gnu
+            archive: zip
+          - target: x86_64-unknown-linux-musl
+            archive: tar.gz tar.xz tar.zst
+          - target: x86_64-apple-darwin
+            archive: zip
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
 
+      # ... whatever build and packaging steps you need here
+      - name: Compile and release
+        uses: rust-build/rust-build.action@v1.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          RUSTTARGET: ${{ matrix.target }}
+          ARCHIVE_TYPES: ${{ matrix.archive }}
+
+      # # and finally do an upload!
+      # - name: Upload release assets
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ needs.create_release.outputs.upload_url }}
+      #     # This is how it will be named on the release page. Put whatever name
+      #     # you like, remember that they need to be different for each platform.
+      #     # You can choose any build matrix parameters. For Rust I use the
+      #     # target triple.
+      #     asset_name: program-name-${{ matrix.target }}
+      #     # The path to the file you want to upload.
+      #     asset_path: ./path/to/your/file
+      #     # probably you will need to change it, but most likely you are
+      #     # uploading a binary file
+      #     asset_content_type: application/octet-stream
+      #
