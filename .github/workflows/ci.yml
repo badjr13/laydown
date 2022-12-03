@@ -1,0 +1,32 @@
+name: Rust
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: create data directory
+        run: mkdir -p ~/.local/share/laydown
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Lint
+        run: cargo clippy
+
+      - name: Format
+        run: cargo fmt
+
+      - name: Test
+        run: cargo test -- --test-threads=1
