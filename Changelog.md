@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**empty**
+
+## [2.6.0] - 2022-12-03
+
 ## Added
 
-- Generate Linux Binary as CI/CD Artifact
+- Generate binaries and upload to release when tag is created
 
-## [2.5.0] - 2022-25-13
+## [2.5.0] - 2022-11-25
 
 ## Added
 
@@ -22,13 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Small syntax update based on 'Clippy' recommendation
 
-## [2.4.1] - 2022-22-13
+## [2.4.1] - 2022-11-22
 
 ## Fixed
 
 - Issue with EDIT feature Pull Request
 
-## [2.4.0] - 2022-22-13
+## [2.4.0] - 2022-11-22
 
 ## Fixed
 - Repair EDIT functionality which broke during migration to Clap
@@ -146,7 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [unreleased]: https://github.com/badjr13/laydown
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
-
+[2.6.0]: https://github.com/badjr13/laydown/tree/46db895dc16a86d9805df36889fab89e08e16c95
+[2.5.0]: https://github.com/badjr13/laydown/tree/3481d6c4d3b21f83b5237a325df8416c07a0b26d
 [2.4.1]: https://github.com/badjr13/laydown/tree/65adc66a3233f7db9a8fd8311a534252388cdd35
 [2.4.0]: https://github.com/badjr13/laydown/tree/da09128b8ec09a3c4cc9357cac1d1b780b654073
 [2.3.0]: https://github.com/badjr13/laydown/tree/246cb54ff78ca9b185435c464ce6bc59abea4b82
