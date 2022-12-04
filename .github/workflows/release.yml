@@ -45,6 +45,7 @@ jobs:
 
       # ... whatever build and packaging steps you need here
       - name: Compile and release
+        id: release
         uses: rust-build/rust-build.action@v1.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,21 +53,20 @@ jobs:
           RUSTTARGET: ${{ matrix.target }}
           ARCHIVE_TYPES: ${{ matrix.archive }}
 
-      # # and finally do an upload!
-      # - name: Upload release assets
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ needs.create_release.outputs.upload_url }}
-      #     # This is how it will be named on the release page. Put whatever name
-      #     # you like, remember that they need to be different for each platform.
-      #     # You can choose any build matrix parameters. For Rust I use the
-      #     # target triple.
-      #     asset_name: program-name-${{ matrix.target }}
-      #     # The path to the file you want to upload.
-      #     asset_path: ./path/to/your/file
-      #     # probably you will need to change it, but most likely you are
-      #     # uploading a binary file
-      #     asset_content_type: application/octet-stream
-      #
+      # and finally do an upload!
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          # This is how it will be named on the release page. Put whatever name
+          # you like, remember that they need to be different for each platform.
+          # You can choose any build matrix parameters. For Rust I use the
+          # target triple.
+          asset_name: program-name-${{ matrix.target }}
+          # The path to the file you want to upload.
+          asset_path: ${{ steps.release.outputs.BUILT_ARCHIVE }}
+          # probably you will need to change it, but most likely you are
+          # uploading a binary file
+          asset_content_type: application/octet-stream
