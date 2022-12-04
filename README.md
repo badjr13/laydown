@@ -2,7 +2,7 @@
 
 `laydown` is a simple CLI application to help you prepare for your next Daily Standup. No longer shall your name be called on only for you to stare into the abyss while you struggle to remember what you did yesterday.
 
-### Preview:
+## Preview:
 
 ```
 $ laydown
@@ -21,7 +21,9 @@ SIDEBARS:
 - Discuss re-writing everything in Rust with team
 ```
 
-### How to Install:
+## How to Install:
+
+### Rust
 
 You can install `laydown` using [Rust](https://www.rust-lang.org/tools/install).
 
@@ -29,18 +31,24 @@ You can install `laydown` using [Rust](https://www.rust-lang.org/tools/install).
 cargo install laydown
 ```
 
-### How to Update:
+### Binary
 
-```
-cargo install laydown
-```
+Binaries can be found in [releases](https://github.com/badjr13/laydown/releases)
 
-### How to Uninstall:
+### Linux
 
-```
-cargo uninstall laydown
-```
+- Download `tar.gz` binary
+- Extract contents
+- Place `laydown` executable in `/usr/local/bin` or `/usr/bin`
 
-### How to Use:
+### Windows
 
-Once installed, inside your terminal, run `laydown --help`
+- Download `zip` binary
+- Extract contents
+- Place `laydown` executable where `Windows` users place binaries
+
+### MacOS
+
+- Download `zip` binary
+- Extract contents
+- Place `laydown` executable where `MacOS` users place binaries
