@@ -33,16 +33,22 @@ cargo install laydown
 
 ### Binary
 
+Binaries can be found in [releases](https://github.com/badjr13/laydown/releases)
+
 ### Linux
 
-- Download Binary
+- Download `tar.gz` binary
 - Extract contents
-- Place `laydown` executable in `/usr/local/bin`
+- Place `laydown` executable in `/usr/local/bin` or `/usr/bin`
 
 ### Windows
 
-- Coming Soon
+- Download `zip` binary
+- Extract contents
+- Place `laydown` executable where `Windows` users place binaries
 
 ### MacOS
 
-- Coming Soon
+- Download `zip` binary
+- Extract contents
+- Place `laydown` executable where `MacOS` users place binaries
