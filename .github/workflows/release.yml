@@ -54,6 +54,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_name: Laydown-${{ matrix.target }}
+          asset_name: Laydown-${{ matrix.target }}.{{ matrix.archive }}
           asset_path: ${{ steps.release.outputs.BUILT_ARCHIVE }}
           asset_content_type: application/octet-stream
