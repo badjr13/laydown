@@ -25,7 +25,7 @@ pub struct Config {
 
 pub fn get_args() -> LaydownResult<Config> {
     let matches = Command::new("laydown")
-        .version("2.6.2")
+        .version("2.6.3")
         .author("Bobby Dorrance")
         .about("Keep track of your next Daily Stand Up")
         .disable_help_subcommand(true)

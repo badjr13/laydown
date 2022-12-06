@@ -168,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [unreleased]: https://github.com/badjr13/laydown
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
-[2.6.2]  https://github.com/badjr13/laydown/tree/7d10f90a58acc958b7fe75da9ec1bdf6579f405b
+[2.6.3]: https://github.com/badjr13/laydown/tree/891348e60bbbe7c8a0b9c4a43dd239c93549f7ab
+[2.6.2]: https://github.com/badjr13/laydown/tree/7d10f90a58acc958b7fe75da9ec1bdf6579f405b
 [2.6.1]: https://github.com/badjr13/laydown/tree/bcdade7de8d9643c576b5c39a0a1f2dbde456640
 [2.6.0]: https://github.com/badjr13/laydown/tree/46db895dc16a86d9805df36889fab89e08e16c95
 [2.5.0]: https://github.com/badjr13/laydown/tree/3481d6c4d3b21f83b5237a325df8416c07a0b26d
