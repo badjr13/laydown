@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **empty**
 
+## [2.6.4] - 2022-12-08
+
+## Added
+
+- Install instructions to README
+
 ## [2.6.3] - 2022-12-06
 
 ## Fixed
@@ -168,6 +174,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [unreleased]: https://github.com/badjr13/laydown
 
 <!-- Obtained by going to last commit before version bump and `Browse Files` -->
+[2.6.4]: https://github.com/badjr13/laydown/tree/3d695b989884dfdb023af8b4cb481b0f68692494
 [2.6.3]: https://github.com/badjr13/laydown/tree/891348e60bbbe7c8a0b9c4a43dd239c93549f7ab
 [2.6.2]: https://github.com/badjr13/laydown/tree/7d10f90a58acc958b7fe75da9ec1bdf6579f405b
 [2.6.1]: https://github.com/badjr13/laydown/tree/bcdade7de8d9643c576b5c39a0a1f2dbde456640

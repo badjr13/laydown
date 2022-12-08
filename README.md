@@ -41,14 +41,16 @@ Binaries can be found in [releases](https://github.com/badjr13/laydown/releases)
 - Extract contents
 - Place `laydown` executable in `/usr/local/bin` or `/usr/bin`
 
-### Windows
-
-- Download `zip` binary
-- Extract contents
-- Place `laydown` executable where `Windows` users place binaries
-
 ### MacOS
 
 - Download `zip` binary
 - Extract contents
-- Place `laydown` executable where `MacOS` users place binaries
+- Place `laydown` executable in `/usr/local/bin` or `/usr/bin`
+
+### Windows
+
+- Download `zip` binary
+- Extract contents
+- Create a directory named `Laydown` in `C:\Program Files`
+- Place `laydown` executable inside `C:\Program Files\Laydown`
+- Update `$PATH` to include `C:\Program Files\Laydown`
