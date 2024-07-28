@@ -1,16 +1,14 @@
 // Tests need to be run in a single thread as multiples tests can access
 // the same data file simultaneously. Use: "cargo test -- --test-threads=1"
 
+use anyhow::Result;
 use assert_cmd::Command;
 use chrono::Local;
-use std::error::Error;
 use std::fs;
 
 use laydown::data_file;
 
-type TestResult = Result<(), Box<dyn Error>>;
-
-fn cleanup() -> TestResult {
+fn cleanup() -> Result<()> {
     let data_file = data_file::get_path_to_laydown_data_file();
 
     fs::remove_file(data_file)?;
@@ -18,13 +16,13 @@ fn cleanup() -> TestResult {
     Ok(())
 }
 
-fn run(args: &[&str]) -> TestResult {
+fn run(args: &[&str]) -> Result<()> {
     Command::cargo_bin("laydown")?.args(args).assert().success();
 
     Ok(())
 }
 
-fn run_and_assert_stdout(args: &[&str], expected_file: &str) -> TestResult {
+fn run_and_assert_stdout(args: &[&str], expected_file: &str) -> Result<()> {
     let expected = fs::read_to_string(expected_file)?;
 
     Command::cargo_bin("laydown")?
@@ -37,7 +35,7 @@ fn run_and_assert_stdout(args: &[&str], expected_file: &str) -> TestResult {
 }
 
 #[test]
-fn empty_standup() -> TestResult {
+fn empty_standup() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(&[], "tests/expected/empty_standup.txt")?;
@@ -46,7 +44,7 @@ fn empty_standup() -> TestResult {
 }
 
 #[test]
-fn add_item_to_did() -> TestResult {
+fn add_item_to_did() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(&["did", "test did item"], "tests/expected/did_item.txt")?;
@@ -55,7 +53,7 @@ fn add_item_to_did() -> TestResult {
 }
 
 #[test]
-fn add_items_to_did() -> TestResult {
+fn add_items_to_did() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -67,7 +65,7 @@ fn add_items_to_did() -> TestResult {
 }
 
 #[test]
-fn add_item_to_doing() -> TestResult {
+fn add_item_to_doing() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -79,7 +77,7 @@ fn add_item_to_doing() -> TestResult {
 }
 
 #[test]
-fn add_items_to_doing() -> TestResult {
+fn add_items_to_doing() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -91,7 +89,7 @@ fn add_items_to_doing() -> TestResult {
 }
 
 #[test]
-fn add_item_to_blocker() -> TestResult {
+fn add_item_to_blocker() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -103,7 +101,7 @@ fn add_item_to_blocker() -> TestResult {
 }
 
 #[test]
-fn add_items_to_blocker() -> TestResult {
+fn add_items_to_blocker() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -115,7 +113,7 @@ fn add_items_to_blocker() -> TestResult {
 }
 
 #[test]
-fn add_item_to_sidebar() -> TestResult {
+fn add_item_to_sidebar() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -127,7 +125,7 @@ fn add_item_to_sidebar() -> TestResult {
 }
 
 #[test]
-fn add_items_to_sidebar() -> TestResult {
+fn add_items_to_sidebar() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -139,7 +137,7 @@ fn add_items_to_sidebar() -> TestResult {
 }
 
 #[test]
-fn clear() -> TestResult {
+fn clear() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(
@@ -154,13 +152,8 @@ fn clear() -> TestResult {
     Ok(())
 }
 
-// #[test]
-// fn edit() -> TestResult {
-//
-// }
-
 #[test]
-fn undo() -> TestResult {
+fn undo() -> Result<()> {
     cleanup()?;
 
     run_and_assert_stdout(&["did", "test did item"], "tests/expected/did_item.txt")?;
@@ -177,33 +170,33 @@ fn undo() -> TestResult {
     Ok(())
 }
 
+// #[test]
+// fn archive() -> Result<()> {
+//     cleanup()?;
+
+//     run_and_assert_stdout(
+//         &["did", "test did item 1", "test did item 2"],
+//         "tests/expected/did_items.txt",
+//     )?;
+
+//     run(&["--archive"])?;
+
+//     let laydown_data_directory = data_file::get_laydown_data_directory();
+//     let archive_directory = laydown_data_directory.join("archive");
+//     let date = Local::now().format("%Y-%m-%d").to_string();
+//     let file_name = format!("{}.txt", date);
+//     let full_path = archive_directory.join(file_name);
+
+//     assert_eq!(
+//         fs::read_to_string("tests/expected/did_items.txt")?,
+//         fs::read_to_string(full_path)?,
+//     );
+
+//     Ok(())
+// }
+
 #[test]
-fn archive() -> TestResult {
-    cleanup()?;
-
-    run_and_assert_stdout(
-        &["did", "test did item 1", "test did item 2"],
-        "tests/expected/did_items.txt",
-    )?;
-
-    run(&["--archive"])?;
-
-    let laydown_data_directory = data_file::get_laydown_data_directory();
-    let archive_directory = laydown_data_directory.join("archive");
-    let date = Local::now().format("%Y-%m-%d").to_string();
-    let file_name = format!("{}.txt", date);
-    let full_path = archive_directory.join(file_name);
-
-    assert_eq!(
-        fs::read_to_string("tests/expected/did_items.txt")?,
-        fs::read_to_string(full_path)?,
-    );
-
-    Ok(())
-}
-
-#[test]
-fn test_data_dir() -> TestResult {
+fn test_data_dir() -> Result<()> {
     let mut data_directory = dirs::data_dir()
         .expect("Failed to find laydown data directory")
         .join("laydown")
