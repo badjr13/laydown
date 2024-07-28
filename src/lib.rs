@@ -2,13 +2,12 @@ use clap::{Arg, Command};
 
 pub mod data_file;
 mod standup;
+use anyhow::Result;
 
 const DID: &str = "did";
 const DOING: &str = "doing";
 const BLOCKER: &str = "blocker";
 const SIDEBAR: &str = "sidebar";
-
-type LaydownResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug)]
 pub struct Config {
@@ -23,7 +22,7 @@ pub struct Config {
     data_dir: bool,
 }
 
-pub fn get_args() -> LaydownResult<Config> {
+pub fn get_args() -> Result<Config> {
     let matches = Command::new("laydown")
         .version("2.6.4")
         .author("Bobby Dorrance")
@@ -160,7 +159,7 @@ pub fn get_args() -> LaydownResult<Config> {
     })
 }
 
-pub fn run(config: Config) -> LaydownResult<()> {
+pub fn run(config: Config) -> Result<()> {
     let file = data_file::get_path_to_laydown_data_file();
 
     let mut show_standup_if_no_args_present = true;

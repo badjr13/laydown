@@ -170,30 +170,30 @@ fn undo() -> Result<()> {
     Ok(())
 }
 
-// #[test]
-// fn archive() -> Result<()> {
-//     cleanup()?;
+#[test]
+fn archive() -> Result<()> {
+    cleanup()?;
 
-//     run_and_assert_stdout(
-//         &["did", "test did item 1", "test did item 2"],
-//         "tests/expected/did_items.txt",
-//     )?;
+    run_and_assert_stdout(
+        &["did", "test did item 1", "test did item 2"],
+        "tests/expected/did_items.txt",
+    )?;
 
-//     run(&["--archive"])?;
+    run(&["--archive"])?;
 
-//     let laydown_data_directory = data_file::get_laydown_data_directory();
-//     let archive_directory = laydown_data_directory.join("archive");
-//     let date = Local::now().format("%Y-%m-%d").to_string();
-//     let file_name = format!("{}.txt", date);
-//     let full_path = archive_directory.join(file_name);
+    let laydown_data_directory = data_file::get_laydown_data_directory();
+    let archive_directory = laydown_data_directory.join("archive");
+    let date = Local::now().format("%Y-%m-%d").to_string();
+    let file_name = format!("{}.txt", date);
+    let full_path = archive_directory.join(file_name);
 
-//     assert_eq!(
-//         fs::read_to_string("tests/expected/did_items.txt")?,
-//         fs::read_to_string(full_path)?,
-//     );
+    assert_eq!(
+        fs::read_to_string("tests/expected/did_items.txt")?,
+        fs::read_to_string(full_path)?,
+    );
 
-//     Ok(())
-// }
+    Ok(())
+}
 
 #[test]
 fn test_data_dir() -> Result<()> {
